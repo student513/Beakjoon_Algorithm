@@ -1,0 +1,32 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int T, N, temp;
+vector<int> L[2],DP[2];
+int main() {
+	cin >> T;
+	while (T--) {
+		L[0].clear(); L[1].clear(); DP[0].clear(); DP[1].clear();
+		cin >> N;
+		DP[0].resize(N); DP[1].resize(N);
+		for (int i = 0; i < N; i++) {
+			cin >> temp;
+			L[0].push_back(temp);
+		}
+		for (int i = 0; i < N; i++) {
+			cin >> temp;
+			L[1].push_back(temp);
+		}
+		DP[0][0] = L[0][0]; DP[1][0] = L[1][0];
+		DP[0][1] = L[1][0] +L[0][1] ; DP[1][1] = L[0][0]+L[1][1];
+
+		for (int i = 2; i < N; i++) {
+			DP[0][i] = L[0][i] + max(DP[1][i - 1], DP[1][i - 2]);
+			DP[1][i] = L[1][i] + max(DP[0][i - 1], DP[0][i - 2]);
+		}
+
+		cout << max(DP[0][N - 1], DP[1][N - 1]) << '\n';
+	}
+	return 0;
+}

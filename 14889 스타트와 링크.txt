@@ -1,0 +1,107 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int N, cnt;
+int map[21][21];
+vector<int> start;
+vector<int> link;
+bool member[21];
+int start_scr;
+int link_scr;
+vector<int> s_scr;
+vector<int> l_scr;
+vector<int> t_scr;
+int arr[11];
+
+void print_team() {
+	cout << '\n';
+	for (int i = 0; i < start.size(); i++) {
+		cout << start[i] << " ";
+	}
+	cout << '\n';
+	for (int i = 0; i < link.size(); i++) {
+		cout << link[i] << " ";
+	}
+	cout << '\n';
+}
+
+void make_duo() {
+	start_scr = link_scr = 0;
+	for (int i = 0; i < start.size(); i++) {
+		for (int j = 0; j < start.size(); j++) {
+			if (i != j) {
+				start_scr += map[start[i]][start[j]];
+				start_scr += map[start[j]][start[i]];
+			}
+		}
+	}
+
+	for (int i = 0; i < link.size(); i++) {
+		for (int j = 0; j < link.size(); j++) {
+			if (i != j) {
+				link_scr += map[link[i]][link[j]];
+				link_scr += map[link[j]][link[i]];
+			}
+		}
+	}
+
+	s_scr.push_back(start_scr);
+	l_scr.push_back(link_scr);
+}
+
+void make_team(int cnt) {
+	if (cnt == N / 2) {
+		start.clear();
+		link.clear();
+		for (int i = 0; i < N; i++) {
+			if (member[i]) {
+				start.push_back(i);
+			}
+			else {
+				link.push_back(i);
+			}
+		}
+		//for (int i = 0; i < 3; i++) { cout << arr[i] << " "; }
+		//cout << '\n';
+		make_duo();
+		//print_team();
+		return;
+	}
+	for (int i = 0; i < N; i++) {
+		if (!member[i] && arr[cnt-1] <= i) {
+			arr[cnt]=i;
+			member[i] = true;
+			make_team(cnt + 1);
+			member[i] = false;
+		}
+		else if(cnt==0) {
+			arr[cnt] = i;
+			member[i] = true;
+			make_team(cnt + 1);
+			member[i] = false;
+		}
+	}
+}
+
+int main() {
+	cin >> N;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			cin >> map[i][j];
+		}
+	}
+
+	make_team(0);
+	//make_duo();
+
+	for (int i = 0; i < s_scr.size(); i++) {
+		int temp = abs(s_scr[i] - l_scr[i]);
+		t_scr.push_back(temp);
+	}
+	sort(t_scr.begin(), t_scr.end());
+
+	cout << t_scr.front()/2;
+	return 0;
+}

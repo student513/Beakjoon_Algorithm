@@ -1,0 +1,17 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cstdio>
+#include <algorithm>
+using namespace std;
+string str;
+
+int main() {
+	while (1) {
+		getline(cin, str);
+		if (str == "")break;
+		cout << str<<'\n';
+	}
+
+	return 0;
+}

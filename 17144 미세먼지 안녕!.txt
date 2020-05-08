@@ -1,0 +1,176 @@
+#include <iostream>
+#include <deque>
+#include <cstdio>
+using namespace std;
+
+int R, C, T;
+int map[51][51][2];
+int temp[51][51];
+int dir_x[4] = { -1,0,1,0 };
+int dir_y[4] = { 0,1,0,-1 };
+pair<int, int> p1;
+pair<int, int> p2;
+deque<int> vec[4];
+int result;
+
+void print() {
+	for (int i = 0; i < R; i++) {
+		for (int j = 0; j < C; j++) {
+			printf("%3d ", map[i][j][0]);
+		}
+		cout << '\n';
+	}
+	cout << '\n';
+	/*
+	for (int i = 0; i < R; i++) {
+		for (int j = 0; j < C; j++) {
+			printf("%3d ", map[i][j][1]);
+		}
+		cout << '\n';
+	}
+	cout << '\n';
+	*/
+}
+
+void spread(int x, int y) {
+	int minus = map[x][y][0] / 5;
+	for (int i = 0; i < 4; i++) {
+		int add_x = x + dir_x[i];
+		int add_y = y + dir_y[i];
+		
+		if (0 <= add_x && add_x < R && 0 <= add_y && add_y < C) {
+			if (map[add_x][add_y][0] != -1) {
+				temp[add_x][add_y] += minus;
+				map[x][y][0] -= minus;
+			}
+		}
+	}
+}
+
+void wind() {
+	for (int i = 0; i < 4; i++)
+		vec[i].clear();
+	for (int i = 1; i < C-1; i++) 
+		vec[0].push_back(map[p1.first][i][0]);
+	for (int i = p1.first; i > 0; i--)
+		vec[1].push_back(map[i][C - 1][0]);
+	for (int i = C - 1; i > 0; i--)
+		vec[2].push_back(map[0][i][0]);
+	for (int i = 0; i < p1.first; i++)
+		vec[3].push_back(map[i][0][0]);
+	map[p1.first][1][0] = 0;
+
+	//cout << vec[0].size();
+	for (int i = 2; i < C; i++) {
+		map[p1.first][i][0] = vec[0].front();
+		vec[0].pop_front();
+	}
+	for (int i = p1.first-1; i >= 0; i--) {
+		map[i][C - 1][0] = vec[1].front();
+		vec[1].pop_front();
+	}
+	for (int i = C - 2; i >= 0; i--) {
+		map[0][i][0] = vec[2].front();
+		vec[2].pop_front();
+	}
+	for (int i = 1; i <= p1.first; i++) {
+		map[i][0][0] = vec[3].front();
+		vec[3].pop_front();
+	}
+	map[p1.first][p1.second][0] = -1;
+
+	for (int i = 0; i < 4; i++)
+		vec[i].clear();
+	for (int i = 1; i < C - 1; i++)
+		vec[0].push_back(map[p2.first][i][0]);
+	for (int i = p2.first; i < R - 1; i++)
+		vec[1].push_back(map[i][C - 1][0]);
+	for (int i = C - 1; i > 0; i--)
+		vec[2].push_back(map[R-1][i][0]);
+	for (int i = R - 1; i > p2.first; i--)
+		vec[3].push_back(map[i][0][0]);
+	map[p2.first][1][0] = 0;
+
+	for (int i = 2; i < C; i++) {
+		map[p2.first][i][0] = vec[0].front();
+		vec[0].pop_front();
+	}
+	for (int i = p2.first + 1; i < R; i++) {
+		map[i][C - 1][0] = vec[1].front();
+		vec[1].pop_front();
+	}
+	for (int i = C - 2; i >= 0; i--) {
+		map[R-1][i][0] = vec[2].front();
+		vec[2].pop_front();
+	}
+	for (int i = R-2; i >= p2.first; i--) {
+		map[i][0][0] = vec[3].front();
+		vec[3].pop_front();
+	}
+	map[p2.first][p2.second][0] = -1;
+}
+
+int main() {
+	cin >> R >> C >> T;
+	for (int i = 0; i < R; i++) {
+		for (int j = 0; j < C; j++) {
+			cin >> map[i][j][0];
+			if (map[i][j][0] > 0)map[i][j][1] = 1;
+			if (map[i][j][0] == -1) p2 = make_pair(i, j);
+		}
+	}
+	p1 = make_pair(p2.first - 1, p2.second);
+	/*
+	print();
+	for (int j = 0; j < R; j++) {
+		for (int k = 0; k < C; k++) {
+			if (map[j][k][0] > 0)map[j][k][1] = 1;
+		}
+	}
+	for (int j = 0; j < R; j++) {
+		for (int k = 0; k < C; k++) {
+			if (map[j][k][1] == 1) {
+				spread(j, k);
+			}
+		}
+	}
+	print();
+	*/
+	//print();
+	for (int i = 0; i < T; i++) {
+		for (int i = 0; i < R; i++) {
+			for (int j = 0; j < C; j++) {
+				map[i][j][1] = 0;
+				temp[i][j] = 0;
+			}
+		}
+		for (int j = 0; j < R; j++) {
+			for (int k = 0; k < C; k++) {
+				if (map[j][k][0] > 0)map[j][k][1] = 1;
+			}
+		}
+		for (int j = 0; j < R; j++) {
+			for (int k = 0; k < C; k++) {
+				if (map[j][k][1] == 1) {
+					spread(j, k);
+				}
+			}
+		}
+		for (int i = 0; i < R; i++) {
+			for (int j = 0; j < C; j++) {
+				map[i][j][0] += temp[i][j];
+			}
+		}
+		wind();
+		//print();
+	}
+
+
+	for (int i = 0; i < R; i++) {
+		for (int j = 0; j < C; j++) {
+			if(map[i][j][0]>0)result += map[i][j][0];
+		}
+	}
+	cout << result;
+	return 0;
+}

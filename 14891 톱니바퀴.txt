@@ -1,0 +1,172 @@
+#include <iostream>
+#include <vector>
+#include <deque>
+#include <cstring>
+#include <string>
+#include <cstdlib>
+using namespace std;
+
+deque<int> dq[4];
+vector<pair<int, int>> vec;
+bool state[4];
+int K;
+int score;
+
+void print() {
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 8; j++) {
+			cout << dq[i][j]<<" ";
+		}
+		cout << '\n';
+	}
+}
+void r_func(int wheel) {
+	int temp;
+	temp = dq[wheel].back();
+	dq[wheel].pop_back();
+	dq[wheel].push_front(temp);
+}
+void l_func(int wheel) {
+	//반시계방향
+	int temp;
+	temp = dq[wheel].front();
+	dq[wheel].pop_front();
+	dq[wheel].push_back(temp);
+}
+
+int main() {
+	for (int i = 0; i < 4; i++) {
+		string str;
+		cin >> str;
+		for (int j = 0; j < 8; j++) {
+			if (str[j] == '0')
+				dq[i].push_back(0);
+			else
+				dq[i].push_back(1);
+		}
+	}
+	//print();
+	cin >> K;
+	vec.push_back(make_pair(-1, -1));
+	for (int i = 0; i < K; i++) {
+		int first, second;
+		cin >> first >> second;
+		vec.push_back(make_pair(first, second));
+	}
+
+	for (int i = 1; i <= K; i++) {
+		memset(state, false, sizeof(state));
+		if (dq[0][2] != dq[1][6]) state[0] = true;
+		if (dq[1][2] != dq[2][6]) state[1] = true;
+		if (dq[2][2] != dq[3][6]) state[2] = true;
+
+		if (vec[i].second == 1) {//시계방향
+			if (vec[i].first == 1) {//1번 톱니
+				r_func(0);
+				if (state[0]) {
+					l_func(1);
+					if (state[1]) {
+						r_func(2);
+						if (state[2]) {
+							l_func(3);
+						}
+					}
+				}
+			}
+			else if (vec[i].first == 2) {//2번 톱니
+				r_func(1);
+				if (state[0]) {
+					l_func(0);
+				}
+				if (state[1]) {
+					l_func(2);
+					if (state[2]) {
+						r_func(3);
+					}
+				}
+			}
+			else if (vec[i].first == 3) {//3번 톱니
+				r_func(2);
+				if (state[1]) {
+					l_func(1);
+					if (state[0]) {
+						r_func(0);
+					}
+				}
+				if (state[2]) {
+					l_func(3);
+				}
+			}
+			else {//4번 톱니
+				r_func(3);
+				if (state[2]) {
+					l_func(2);
+					if (state[1]) {
+						r_func(1);
+						if (state[0]) {
+							l_func(0);
+						}
+					}
+				}
+			}
+		}
+		else {//반시계방향
+			if (vec[i].first == 1) {//1번 톱니
+				l_func(0);
+				if (state[0]) {
+					r_func(1);
+					if (state[1]) {
+						l_func(2);
+						if (state[2]) {
+							r_func(3);
+						}
+					}
+				}
+			}
+			else if (vec[i].first == 2) {//2번 톱니
+				l_func(1);
+				if (state[0]) {
+					r_func(0);
+				}
+				if (state[1]) {
+					r_func(2);
+					if (state[2]) {
+						l_func(3);
+					}
+				}
+			}
+			else if (vec[i].first == 3) {//3번 톱니
+				l_func(2);
+				if (state[1]) {
+					r_func(1);
+					if (state[0]) {
+						l_func(0);
+					}
+				}
+				if (state[2]) {
+					r_func(3);
+				}
+			}
+			else {//4번 톱니
+				l_func(3);
+				if (state[2]) {
+					r_func(2);
+					if (state[1]) {
+						l_func(1);
+						if (state[0]) {
+							r_func(0);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if (dq[0][0]) score += 1;
+	if (dq[1][0]) score += 2;
+	if (dq[2][0]) score += 4;
+	if (dq[3][0]) score += 8;
+
+	cout << score;
+	return 0;
+}

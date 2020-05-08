@@ -1,0 +1,23 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int L, A, B, C, D, a, b;
+int main() {
+	cin >> L >> A >> B >> C >> D;
+	if (B%D == 0) {
+		a = B / D;
+	}
+	else {
+		a = B / D + 1;
+	}
+	if (A%C == 0) {
+		b = A / C;
+	}
+	else {
+		b = A / C + 1;
+	}
+
+	cout << L-max(a, b);
+	return 0;
+}

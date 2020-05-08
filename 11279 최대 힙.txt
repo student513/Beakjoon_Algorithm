@@ -1,0 +1,59 @@
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include <cstdlib>
+#include <cstring>
+using namespace std;
+int lastindex;
+int arr[100001];
+
+void swap(int i, int j) {
+	int temp = arr[i];
+	arr[i] = arr[j];
+	arr[j] = temp;
+}
+void BubbleUp(int i) {
+	if (i > 1 && arr[i] > arr[i / 2]) {
+		swap(i, i / 2);
+		BubbleUp(i / 2);
+	}
+}
+void insert(int data, int idx) {
+	arr[idx] = data;
+	BubbleUp(idx);
+}
+void BubbleDown(int i, int lastindex) {
+	int child = 2 * i;
+	if (child < lastindex &&arr[child + 1] > arr[child])
+		child++;
+	if (child <= lastindex && arr[i] < arr[child]) {
+		swap(i, child);
+		BubbleDown(child, lastindex);
+	}
+}
+void delete_top() {
+	swap(1, lastindex);
+	lastindex--;
+	BubbleDown(1, lastindex);
+}
+int main() {
+	int size;
+	int num;
+	scanf("%d",&size);
+
+	for (int i = 0; i < size; i++) {
+		scanf("%d",&num);
+		if (num) {
+			insert(num, ++lastindex);
+		}
+		else if (lastindex > 0 && num==0) {
+			printf("%d\n", arr[1]);
+			delete_top();
+		}
+		else if(lastindex==0 && num==0){
+			printf("0\n");
+		}
+	}
+
+	return 0;
+}

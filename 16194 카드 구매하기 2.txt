@@ -1,0 +1,27 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <climits>
+using namespace std;
+
+int N;
+int arr[1001];
+int DP[1001];
+
+int main(){
+	cin >> N;
+	for (int i = 1; i <= N; i++)
+		cin >> arr[i];
+	DP[0] = 0;
+	DP[1] = arr[1];
+	for (int i = 2; i <= N; i++) {
+		int min=INT_MAX;
+		for (int j = 0; j <= i; j++) {
+			if (min > DP[i - j] + arr[j]&& DP[i - j] + arr[j]!=0)
+				min = DP[i - j] + arr[j];
+		}
+		DP[i] = min;
+	}
+	cout << DP[N];
+	return 0;
+}

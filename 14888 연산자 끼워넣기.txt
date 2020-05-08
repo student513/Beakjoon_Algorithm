@@ -1,0 +1,116 @@
+#include <iostream>
+#include <vector>
+#include <set>
+#include <algorithm>
+using namespace std;
+
+enum Op { PLUS, MINUS, MULTI, DIV };
+
+vector<pair<int, bool>> check_op;
+vector<int> vec;
+vector<int> result;
+int vec_temp[11];
+int num[11];
+set<vector<int>> s;
+int N, op_num;
+int op[4];
+
+void print() {
+	cout << '\n';
+	/*
+	for (int i = 0; i < check_op.size(); i++) {
+		cout << check_op[i].first << " ";
+	}
+	*/
+	/*
+	for (int i = 0; i < op_num; i++) {
+		cout << vec_temp[i] << " ";
+	}
+	*/
+	set<vector<int>>::iterator iter;
+	for (iter = s.begin(); iter != s.end(); iter++) {
+		const vector<int>&i = (*iter);
+		for (int j = 0; j < i.size(); j++) {
+			cout << i[j] << " ";
+		}
+		cout << '\n';
+	}
+	cout << '\n';
+}
+
+void cal() {
+	set<vector<int>>::iterator iter;
+	for (iter = s.begin(); iter != s.end(); iter++) {
+		const vector<int>&i = (*iter);
+		int z = num[0];
+		for (int j = 1; j <= i.size(); j++) {
+			switch (i[j-1]) {
+			case PLUS:
+				z = z + num[j]; break;
+			case MINUS:
+				z = z - num[j]; break;
+			case MULTI:
+				z = z * num[j]; break;
+			case DIV:
+				z = z / num[j]; break;
+			}
+		}
+		result.push_back(z);
+	}
+}
+
+void func(int cnt) {
+	if (cnt == op_num) {
+		vec.clear();
+		for (int i = 0; i < op_num; i++) {
+			vec.push_back(vec_temp[i]);
+		}
+		s.insert(vec);
+		return;
+	}
+	for (int i = 0; i < op_num; i++) {
+		if (!check_op[i].second) {
+			vec_temp[cnt] = check_op[i].first;
+			check_op[i].second = true;
+			func(cnt + 1);
+			check_op[i].second = false;
+		}
+	}
+}
+
+int main() {
+	cin >> N;
+	for (int i = 0; i < N; i++) {
+		int temp;
+		cin >> temp;
+		num[i]=temp;
+	}
+	for (int i = 0; i < 4; i++) {
+		cin >> op[i];
+	}
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < op[i]; j++) {
+			switch (i) {
+			case PLUS:
+				check_op.push_back(pair<int,bool>(PLUS, false)); op_num++;
+				break;
+			case MINUS:
+				check_op.push_back(pair<int, bool>(MINUS, false)); op_num++;
+				break;
+			case MULTI:
+				check_op.push_back(pair<int, bool>(MULTI, false)); op_num++;
+				break;
+			case DIV:
+				check_op.push_back(pair<int, bool>(DIV, false)); op_num++;
+				break;
+			}
+		}
+	}
+	func(0);
+	//print();
+	cal();
+	sort(result.begin(), result.end());
+	cout << result.back() << '\n' << result.front();
+	return 0;
+}

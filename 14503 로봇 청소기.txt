@@ -1,0 +1,111 @@
+#include <iostream>
+
+using namespace std;
+struct robot {
+	int r, c;
+	int dir;
+};
+robot r;
+
+int N, M;
+int xy[5][2] = { {-1,0},{0,1}, {1,0}, {0,-1}, {-1,0} };
+int map[51][51][2];
+int cnt;
+int rot;
+int l_x, l_y, f_x, f_y, r_x, r_y, b_x, b_y;
+bool clean_move(int x, int y){//입력된 좌표가 청소가능한가?
+	if (0 <= x && x < N && 0 <= y && y < M &&
+		!map[x][y][0] && !map[x][y][1]) {
+		return true;
+	}
+	else return false;
+}
+
+void func_assgin() {
+	l_x = r.r + xy[(r.dir - 1) % 4][0];//현재 방향기준 왼쪽 x
+	l_y = r.c + xy[(r.dir - 1) % 4][1];//현재 방향기준 왼쪽 y
+	f_x = r.r + xy[r.dir][0];//현재 방향기준 앞쪽 x
+	f_y = r.c + xy[r.dir][1];//현재 방향기준 앞쪽 y
+	r_x = r.r + xy[(r.dir + 1) % 4][0];//현재 방향기준 오른쪽 x
+	r_y = r.c + xy[(r.dir + 1) % 4][1];//현재 방향기준 오른쪽 y
+	switch (r.dir) {
+	case 0:
+		b_x = r.r + xy[2][0];//현재 방향기준 뒤쪽 x
+		b_y = r.c + xy[2][1];//현재 방향기준 뒤쪽 y
+		break;
+	case 1:
+		b_x = r.r + xy[3][0];//현재 방향기준 뒤쪽 x
+		b_y = r.c + xy[3][1];//현재 방향기준 뒤쪽 y
+		break;
+	case 2:
+		b_x = r.r + xy[0][0];//현재 방향기준 뒤쪽 x
+		b_y = r.c + xy[0][1];//현재 방향기준 뒤쪽 y
+		break;
+	case 3:
+		b_x = r.r + xy[1][0];//현재 방향기준 뒤쪽 x
+		b_y = r.c + xy[1][1];//현재 방향기준 뒤쪽 y
+		break;
+	case 4:
+		b_x = r.r + xy[2][0];//현재 방향기준 뒤쪽 x
+		b_y = r.c + xy[2][1];//현재 방향기준 뒤쪽 y
+		break;
+	}
+	
+}
+
+int main() {
+	cin >> N >> M;
+	cin >> r.r >> r.c >> r.dir;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			cin >> map[i][j][0];
+		}
+	}
+	map[r.r][r.c][1] = 1;
+	cnt++;
+	while (true) {
+		if (r.dir == 0) r.dir = 4;
+
+		func_assgin();
+		
+		if (clean_move(l_x,l_y)) {//왼쪽 청소가 가능할 떄
+			map[l_x][l_y][1] = 1;//visit
+			r.r = l_x; r.c = l_y;//move
+			cnt++;
+			r.dir = (r.dir - 1) % 4;//방향전환
+			//rot = 0;
+		}
+		
+		else if (!clean_move(l_x, l_y) && !clean_move(r_x, r_y) && !clean_move(f_x, f_y) && !clean_move(b_x, b_y)) {//네 방향이 막혀있을/청소되어있을 때
+			if (map[b_x][b_y][0]) {//뒤쪽이 막혀있을 때
+				break;
+			}
+			else if (!map[b_x][b_y][0]) {//뒤쪽이 뚫려있을 때
+				r.r = b_x; r.c = b_y;
+			}
+		}
+		/*
+		else if (rot < 4) {//찾을 때까지 회전
+			r.dir = (r.dir - 1) % 4;
+			rot++;
+		}
+		else if (rot == 4) {
+			rot = 0;
+			if (map[b_x][b_y][0]) {//뒤쪽이 막혀있을 때
+				break;
+			}
+			else if (!map[b_x][b_y][0]) {//뒤쪽이 뚫려있을 때
+				r.r = b_x; r.c = b_y;
+			}
+		}
+		*/
+		
+		else {
+			r.dir = (r.dir - 1) % 4;
+		}
+	}
+	
+	cout << cnt;
+
+	return 0;
+}

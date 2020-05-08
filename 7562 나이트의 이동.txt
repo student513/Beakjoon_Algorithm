@@ -1,0 +1,62 @@
+#include <iostream>
+#include <utility>
+#include <queue>
+#include <cstring>
+using namespace std;
+
+int addx[] = { 1,2,2,1,-1,-2,-2,-1 };
+int addy[] = { -2,-1,1,2,2,1,-1,-2 };
+int chess[301][301];
+bool visited[301][301];
+int dist[301][301];
+queue<pair<int,int>> que;
+
+int main() {
+	pair<int, int> start;
+	pair<int, int> end;
+	pair<int, int> curr;
+	pair<int, int> next;
+	int test, size, x0, y0, x1, y1;
+
+	cin >> test;
+	for (int i = 0; i < test; i++) {
+		int count = 0;
+		memset(chess, 0, sizeof(chess));
+		memset(visited, 0, sizeof(visited));
+		memset(dist, 0, sizeof(dist));
+
+		cin >> size;
+		cin >> x0 >> y0 >> x1 >> y1;
+		start = make_pair(x0, y0);
+		end = make_pair(x1, y1);
+
+		visited[x0][y0] = true;
+		que.push(start);
+		while (!que.empty()) {
+			for (int j = 0; j < que.size(); j++) {
+				curr = que.front(); que.pop();
+				for (int k = 0; k < 8; k++) {
+					int adjX = addx[k] + curr.first, adjY = addy[k] + curr.second;
+					if (0 <= adjX && adjX < size && 0 <= adjY && adjY < size) {
+						//다음으로 움직일 좌표의 정보 저장
+						next = make_pair(adjX, adjY);
+						if (!visited[adjX][adjY]) {
+							visited[adjX][adjY] = true;
+							que.push(next);
+							dist[adjX][adjY] = dist[curr.first][curr.second]+1;
+						}
+					}
+				}
+			}
+		}
+		/*
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				cout << dist[i][j]<<" ";
+			}
+			cout << "\n";
+		}*/
+		cout << dist[end.first][end.second] << endl;
+	}
+	return 0;
+}

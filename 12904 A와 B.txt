@@ -1,0 +1,22 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+bool flag;
+string S, T;
+
+int main() {
+	cin >> S >> T;
+	while (1) {
+		if (S.length() == T.length()) {
+			if (S == T)flag = true;
+			break;
+		}
+		char c = T[T.length() - 1];
+		T.pop_back();
+		if (c == 'B')reverse(T.begin(), T.end());
+	}
+	cout << flag << "\n";
+	return 0;
+}

@@ -1,0 +1,84 @@
+#include <iostream>
+#include <vector>
+#include <cstring>
+#include <cstdio>
+#include <queue>
+#include <utility>
+using namespace std;
+vector<int> vec[501];
+bool visited[501];
+queue<int> que;
+vector<int> temp;
+
+int bfs(int start) {
+	int curr;
+	int count = 1;
+	visited[start] = true;
+
+	que.push(start);
+	while (!que.empty()) {
+		for (int i = 0; i < que.size(); i++) {
+			curr = que.front(); que.pop();
+			temp.push_back(curr);
+			for (int j = 0; j < vec[curr].size(); j++) {
+				int next = vec[curr][j];
+				if (!visited[next]) {
+					que.push(next);
+					visited[next] = true;
+					count++;
+				}
+			}
+		}
+	}
+
+	return count;
+}
+
+int main() {
+	int n, m;
+	int first, second;
+	int case_num = 0;
+	
+	do {
+		int point = 1;
+		case_num++;
+		int tree = 0;
+		cin >> n >> m;
+		if (n == 0 && m == 0)break;
+		memset(visited, 0, sizeof(visited));
+		for (int i = 0; i < 501; i++)
+			vec[i].clear();
+
+		for (int i = 0; i < m; i++) {
+			cin >> first >> second;
+			vec[first].push_back(second);
+			vec[second].push_back(first);
+		}
+
+		for (int i = 1; i <= n; i++) {
+			if (!visited[i]) {
+				int edge = 0;
+				int vertex = bfs(i);
+				for (int j = 0; j < vertex; j++) {//vertex 개수만큼 vec[curr].size()를 더해야함
+					edge += vec[temp[j]].size();
+				}
+				edge /= 2;
+				if (vertex == edge+1)
+					tree++;
+				temp.clear();
+			}
+		}
+
+		if (tree == 1) {
+			printf("Case %d: There is one tree.\n", case_num);
+		}
+		else if (tree > 1) {
+			printf("Case %d: A forest of %d trees.\n", case_num, tree);
+		}
+		else {//싸이클이 생길 경우 : 정점 <= 간선
+			printf("Case %d: No trees.\n", case_num);
+		}
+	} while (1);
+
+	return 0;
+}

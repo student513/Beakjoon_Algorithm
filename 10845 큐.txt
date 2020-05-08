@@ -1,0 +1,52 @@
+#include <iostream>
+#include <string>
+#include <queue>
+
+using namespace std;
+
+int main() {
+	queue <int> que;
+	string arr[10001];
+	int num;
+	int temp;
+	cin >> num;
+
+
+	for (int i = 0; i < num; i++) {
+		cin >> arr[i];
+
+		if (arr[i] == "push") {
+			cin >> temp;
+			que.push(temp);
+		}
+		else if (arr[i] == "front") {
+			if (!que.empty())
+				cout << que.front() << "\n";
+			else
+				cout << "-1" << "\n";
+		}
+		else if (arr[i] == "back") {
+			if (!que.empty())
+				cout << que.back() << "\n";
+			else
+				cout << "-1" << "\n";
+		}
+		else if (arr[i] == "size") {
+			cout << que.size() << "\n";
+		}
+		else if (arr[i] == "empty") {
+			cout << que.empty() << "\n";
+		}
+		else if (arr[i] == "pop") {
+			if (que.empty()) {
+				cout << "-1" << "\n";
+			}
+			else {
+				cout << que.front() << "\n";
+				que.pop();
+			}
+			
+		}
+	}
+	return 0;
+}

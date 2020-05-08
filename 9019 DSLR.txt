@@ -1,0 +1,73 @@
+#include <iostream>
+#include <cstring>
+#include <queue>
+#include <algorithm>
+#include <string>
+#define MAX 10001
+using namespace std;
+bool check[MAX];
+int from[MAX];
+int how[MAX];
+
+int main() {
+	int t;
+	cin >> t;
+	while (t--) {
+		int n, m;
+		cin >> n >> m;
+		memset(check, false, sizeof(check));
+		memset(from, 0, sizeof(from));
+		memset(how, 0, sizeof(how));
+		queue<int> q;
+		q.push(n);
+		check[n] = true;
+		from[n] = -1;
+
+		while (!q.empty()) {
+			int now = q.front();
+			q.pop();
+			int next;
+
+			next = (2 * now) % 10000;
+			if (!check[next]) {
+				check[next] = true;
+				q.push(next);
+				from[next] = now;
+				how[next] = 'D';
+			}
+			
+			next = now - 1;
+			if (next == -1)
+				next = 9999;
+			if (!check[next]) {
+				check[next] = true;
+				q.push(next);
+				from[next] = now;
+				how[next] = 'S';
+			}
+
+			next = (now % 1000) * 10 + (now / 1000);
+			if (!check[next]) {
+				check[next] = true;
+				q.push(next);
+				from[next] = now;
+				how[next] = 'L';
+			}
+
+			next = (now % 10) * 1000 + (now / 10);
+			if (!check[next]) {
+				check[next] = true;
+				q.push(next);
+				from[next] = now;
+				how[next] = 'R';
+			}
+		}
+		string result = "";
+		while (m != n) {
+			result += how[m];
+			m = from[m];
+		}
+		reverse(result.begin(), result.end());
+		cout << result << '\n';
+	}
+}

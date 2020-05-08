@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int N;
+int arr[1001];
+vector<int> vec, DP;
+
+int main() {
+	cin >> N;
+	DP.resize(N+1);
+	for (int i = 1; i <= N; i++) cin >> arr[i];
+	for (int i = 1; i <= N; i++) DP[i] = 1;
+
+	int idx=1, m = -1;
+	for (int i = 2; i <= N; i++) {
+		for (int j = 1; j < i; j++) {
+			if (arr[i] > arr[i - j] && DP[i - j] >= DP[i]) {
+				DP[i] = DP[i - j]+1;
+				if (m < DP[i]) {
+					m = DP[i];
+					idx = i;
+				}
+			}
+		}
+	}
+	int a = 1;
+	vec.push_back(arr[idx]);
+	for (int i = 1; i < idx; i++) {
+		if (arr[idx] > arr[idx - i] && DP[idx - i] == DP[idx] - a) {
+			a++;
+			vec.push_back(arr[idx - i]);
+		}
+	}
+	int Max = *max_element(DP.begin(), DP.end());
+	cout << Max << '\n';
+
+	reverse(vec.begin(), vec.end());
+	for (int i = 0; i < vec.size(); i++)cout << vec[i] << " "; cout << '\n';
+	
+	
+	return 0;
+}

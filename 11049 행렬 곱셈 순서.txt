@@ -1,0 +1,32 @@
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+int a[501][2];//[0]은 행, [1]은 열의 개수
+int DP[501][501];
+
+int main() {
+	int n;
+	scanf("%d", &n);
+	for (int i = 1; i <= n; i++) {
+		scanf("%d %d", &a[i][0], &a[i][1]);
+	}
+	for (int i = 1; i <= n - 1; i++) {//이웃한 행렬 간의 곱
+		DP[i][i + 1] = a[i][0] * a[i][1] * a[i + 1][1];
+		//i번째 행렬의 행의 개수*i번째 행렬의 열의 개수*(i+1)번째 행렬의 열의 개수
+	}
+	for (int l = 2; l <= n; l++) {//이웃하지 않은 행렬 간의 곱
+		for (int i = 1; i <= n - l; i++) {//l의 거리만큼 떨어졌으니까 n-l이어야지
+			int j = i + l;//벌어진 거리만큼
+			for (int k = i; k < j; k++) {
+				int temp = DP[i][k] + DP[k + 1][j] + a[i][0] * a[k][1] * a[j][1];
+				if (DP[i][j] == 0 || DP[i][j] > temp) {//아직 답을 구하지 않았을때||for문을 돌리면서 더 작은 값이 나왔을 때
+					DP[i][j] = temp;
+				}
+			}
+		}
+	}
+	printf("%d\n", DP[1][n]);
+}

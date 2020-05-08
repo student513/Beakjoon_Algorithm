@@ -1,0 +1,34 @@
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include <utility>
+using namespace std;
+
+int N, M;
+bool visited[8];
+int answer[8];
+void dfs(int index) {
+	if (index == M) {
+		for (int i = 0; i < M; i++) {
+			printf("%d ", answer[i]);
+		}
+		printf("\n");
+		return;
+	}
+	for (int i = 0; i < N; i++) {
+		if (!visited[i]) {
+			visited[i] = true;
+			answer[index] = i + 1;
+			dfs(index + 1);
+			visited[i] = false;
+		}
+	}
+}
+
+int main() {
+	cin >> N >> M;
+
+	dfs(0);
+
+	return 0;
+}

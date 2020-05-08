@@ -1,0 +1,40 @@
+#include <cstdio>
+#include <algorithm>
+#include <iostream>
+#include <vector>
+#include <deque>
+using namespace std;
+long long int N, B, C;
+vector<long long int> v,r;
+int main() {
+	cin >> N;
+	for (int i = 0; i < N; i++) {
+		int temp;
+		cin >> temp;
+		v.push_back(temp);
+	}
+	cin >> B >> C;
+
+	for (int i = 0; i < N; i++) {
+		long long int cnt = 0;
+		long long int temp = v[i];
+		temp -= B;
+		cnt++;
+		if (temp > 0) {
+			if (temp <= C) {
+				cnt++;
+			}
+			else if (temp>C) {
+				if(temp%C==0)cnt += temp / C;
+				else cnt += temp / C + 1;
+			}
+		}
+		r.push_back(cnt);
+	}
+	long long int sum = 0;
+	for (int i = 0; i < r.size(); i++) {
+		sum += r[i];
+	}
+	cout << sum;
+	return 0;
+}

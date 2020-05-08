@@ -1,0 +1,32 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int N;
+vector<int>v;
+
+bool func() {
+	for (int i = 0; i < N - 1; i++) {
+		if (v[i] >= v[i + 1])
+			return false;
+	}
+	return true;
+}
+int main() {
+	cin >> N;
+	v.resize(N);
+	for (int i = 0; i < N; i++)
+		cin >> v[i];
+	int idx = N - 1;
+	
+	if (func()) {
+		cout << -1;
+		return 0;
+	}
+	prev_permutation(v.begin(), v.end());
+	for (int i = 0; i < N; i++)
+		cout << v[i] << " ";
+
+	return 0;
+}

@@ -1,0 +1,34 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int N;
+int T[1001], P[1001], DP[1001];
+
+int main() {
+	cin >> N;
+	for (int i = 1; i <= N; i++) cin >> T[i] >> P[i];
+
+	for (int i = 1; i <= N; i++) {
+		if (i+T[i]-1 <= N)
+			DP[i] = P[i];
+	}
+	
+	for (int i = 2; i <= N; i++) {
+		for (int j = 1; j < i; j++) {
+			if (i - (i - j) >= T[i - j] && i + T[i] <= N + 1) {
+				if (DP[i - j] + P[i] > DP[i]) {
+					DP[i] = DP[i - j] + P[i];
+				}
+			}
+		}
+	}
+	/*
+	for (int i = 1; i <= N; i++) {
+		cout << DP[i] << " ";
+	}cout << '\n';
+	*/
+	int Max = *max_element(DP + 1, DP + 1 + N);
+	cout << Max;
+	return 0;
+}

@@ -1,0 +1,31 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+long long int DP[100001][4];
+vector<int> arr;
+int T,temp;
+int main() {
+	cin >> T;
+	for (int i = 0; i < T; i++) {
+		cin >> temp;
+		arr.push_back(temp);
+	}
+	int Max = *max_element(arr.begin(), arr.end());
+	DP[1][1] = 1;
+	DP[2][2] = 1;
+	DP[3][1] = 1; DP[3][2] = 1; DP[3][3] = 1;
+	DP[4][1] = 2; DP[4][2] = 0; DP[4][3] = 1;
+	DP[5][1] = 1; DP[5][2] = 2; DP[5][3] = 1;
+	DP[6][1] = 3; DP[6][2] = 3; DP[6][3] = 2;
+
+	for (int i = 7; i <= Max; i++) {
+		DP[i][3] = DP[i - 3][1] % 1000000009 + DP[i - 3][2] % 1000000009;
+		DP[i][2] = DP[i - 2][1] % 1000000009 + DP[i - 2][3] % 1000000009;
+		DP[i][1] = DP[i - 1][2] % 1000000009 + DP[i - 1][3] % 1000000009;
+	}
+	for (int i = 0; i < T; i++) {
+		cout << (DP[arr[i]][1] + DP[arr[i]][2] + DP[arr[i]][3]) % 1000000009 << '\n';
+	}
+	return 0;
+}

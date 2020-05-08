@@ -1,0 +1,14 @@
+#include <stdio.h>
+
+int main() {
+	char S[100000];
+	int len;
+	scanf("%s",&S);
+	len = strlen(S);
+
+	for (int i = 0; i < len; i++) {
+		printf("%d\n", i);
+	}
+
+	return 0;
+}

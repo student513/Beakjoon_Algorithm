@@ -1,0 +1,148 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <algorithm>
+#include <cstring>
+using namespace std;
+
+int N, M, cnt;
+//int arr[9][9];
+vector<int> arr[9];
+vector<int> temp_vec[9];
+int temp[9][9];
+bool visited[9][9];
+queue<pair<int,int>> que;
+int dir[4][2] = { {-1,0},{0,1},{1,0},{0,-1} };
+vector<pair<int, int>> vir_vec;
+vector<int> result;
+bool vist_arr[9][9];
+
+void print() {
+	
+	cout << '\n';
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			cout << arr[i][j] << " ";
+		}
+		cout << '\n';
+	}
+	/*
+	cout << '\n';
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			cout << temp_vec[i][j]<<" ";
+		}
+		cout << '\n';
+	}
+	*/
+}
+
+void copy_vec(vector<int> *src, vector<int> *dest) {
+
+	//dest->clear();
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			dest[i][j] = src[i][j];
+		}
+	}
+}
+
+void bfs() {//이게 한번만 도는거같은데
+	for (int i = 0; i < 9; i++) {
+		memset(visited[i], false, sizeof(visited[i]));
+	}
+	for(int i = 0; i < vir_vec.size(); i++) {
+		que.push(make_pair(vir_vec[i].first, vir_vec[i].second));
+		visited[vir_vec[i].first][vir_vec[i].second] = true;
+
+		while (!que.empty()) {
+			int x = que.front().first; int y = que.front().second;
+			que.pop();
+			for (int j = 0; j < 4; j++) {
+				int dir_x = x + dir[j][0]; int dir_y = y + dir[j][1];
+				if (0 <= dir_x && dir_x < N && 0 <= dir_y && dir_y < M) {
+					if (arr[dir_x][dir_y] == 0 && !visited[dir_x][dir_y]) {
+						visited[dir_x][dir_y] = true;
+						que.push(make_pair(dir_x, dir_y));
+						arr[dir_x][dir_y] = 2;
+					}
+				}
+			}
+		}
+	}
+}
+
+void func(int cnt) {
+	if (cnt == 3) {
+		int temp = 0;
+		//copy
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				temp_vec[i][j] = arr[i][j];
+			}
+		}
+		//print();
+		bfs();//바이러스 퍼뜨리기
+		//print();
+		for (int i = 0; i < N; i++){//안전구역 count하기
+			for (int j = 0; j < M; j++) {
+				if (arr[i][j] == 0) {
+					temp++;
+				}
+			}
+		}
+		result.push_back(temp);
+		//print(); cout << temp;
+
+		//퍼진 2들도 다시 돌려놔야하는구나~!!!!!!
+		//copy
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				arr[i][j] = temp_vec[i][j];
+			}
+		}
+
+
+		//print();
+		return;
+	}
+
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			if (arr[i][j] == 0 ){
+				arr[i][j] = 1;
+				func(cnt + 1);
+				arr[i][j] = 0;//한번 끝내고 나면 arr를 다시 원래대로 돌려줘야 한다. 
+			}
+		}
+	}
+}
+int main() {
+	cin >> N >> M;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			int temp;
+			cin >> temp; arr[i].push_back(temp);
+			if (temp == 2) {
+				vir_vec.push_back(make_pair(i,j));
+			}
+		}
+	}
+	//copy_vec(arr, temp_vec);
+	
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			temp_vec[i].push_back(arr[i][j]);
+		}
+	}
+	
+	//bfs();
+	//print();
+	func(0);
+	
+	sort(result.begin(), result.end());
+
+	cout << result.back();
+
+	return 0;
+}

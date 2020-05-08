@@ -1,0 +1,33 @@
+#include <iostream>
+using namespace std;
+int N,cnt;
+int main() {
+	cin >> N;
+	int chg = 1000 - N;
+	while (chg >= 500) {
+		chg -= 500;
+		cnt++;
+	}
+	while (chg >= 100) {
+		chg -= 100;
+		cnt++;
+	}
+	while (chg >= 50) {
+		chg -= 50;
+		cnt++;
+	}
+	while (chg >= 10) {
+		chg -= 10;
+		cnt++;
+	}
+	while (chg >= 5) {
+		chg -= 5;
+		cnt++;
+	}
+	while (chg >= 1) {
+		chg -= 1;
+		cnt++;
+	}
+	cout << cnt;
+	return 0;
+}

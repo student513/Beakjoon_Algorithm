@@ -1,0 +1,65 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+typedef struct treeNode {
+	int data;
+	treeNode *left, *right;
+}treeNode;
+treeNode* root;
+
+int cnt;
+vector<int> vec;
+
+void insert(int num) {
+	treeNode* newNode = new treeNode[1];
+	newNode->data = num;
+	newNode->left = NULL;
+	newNode->right = NULL;
+
+	if (cnt == 0) {
+		root = newNode;
+	}
+	else {
+		treeNode *temp = root;
+		while (1) {
+			if (temp->data > num) {
+				if (temp->left == NULL) {
+					temp->left = newNode;
+					break;
+				}
+				temp = temp->left;
+			}
+			else {
+				if (temp->right == NULL) {
+					temp->right = newNode;
+					break;
+				}
+				temp = temp->right;
+			}
+		}
+	}
+	cnt++;
+	return;
+}
+
+void postOrder(treeNode *root) {
+	if (root) {
+		postOrder(root->left);
+		postOrder(root->right);
+		cout << root->data << '\n';
+	}
+	
+}
+
+int main() {
+	int val;
+	while (cin >> val) {
+		vec.push_back(val);
+	}
+	for (int i = 0; i < vec.size(); i++) {
+		insert(vec[i]);
+	}
+	postOrder(root);
+	return 0;
+}

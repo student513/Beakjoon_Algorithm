@@ -1,0 +1,81 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cstdio>
+using namespace std;
+
+int N, M;
+int map[501][501];
+vector<pair<int, int>> vec;
+vector<int> result;
+int dir[4][2] = { {-1,0},{0,1},{1,0},{0,-1} };
+int chk_[8][3][2] = { {{1,0},{1,1},{2,0}}, {{1,0},{1,-1},{2,0}},{{-1,0},{-1,1},{-2,0}},{{-1,0},{-1,-1},{-2,0}},
+{{0,1},{0,2},{-1,1}},{{0,1},{0,2},{1,1}}, {{0,-1},{0,-2},{1,-1}}, {{0,-1},{0,-2},{-1,-1} } };
+
+void sum(vector<pair<int, int>> v) {
+	int s = 0;
+	for (int i = 0; i < 4; i++) {
+		s += map[v[i].first][v[i].second];
+		//printf("(%d,%d): %d / ", v[i].first, v[i].second, map[v[i].first][v[i].second]);
+	}
+	//cout << '\n';
+	result.push_back(s);
+	//cout << s << '\n';
+}
+bool visited(int s, int x, int y) {
+	pair<int, int> p = make_pair(x, y);
+	for (int i = 0; i < s; i++) {
+		if (vec[i].first == p.first && vec[i].second == p.second) {
+			return true;
+		}
+	}
+	return false;
+}
+void func(int s, int x, int y) {
+	if (s == 4) {
+		sum(vec);
+		return;
+	}
+	for (int i = 0; i < 4; i++) {//ㅗ가 안만들어짐
+		int dir_x = x + dir[i][0]; int dir_y = y + dir[i][1];
+		if (0 > dir_x || dir_x >= N || 0 > dir_y || dir_y >= M) continue;
+		if (visited(s,dir_x,dir_y)) continue;//조건문: 이미 방문한 칸인가?
+		vec[s].first = dir_x;
+		vec[s].second = dir_y;
+		func(s + 1, dir_x, dir_y);
+		
+	}
+}
+void chk_add(int x,int y) {
+	for (int i = 0; i < 8; i++) {
+		int a_x = x + chk_[i][0][0]; int a_y = y + chk_[i][0][1];
+		int b_x = x + chk_[i][1][0]; int b_y = y + chk_[i][1][1];
+		int c_x = x + chk_[i][2][0]; int c_y = y + chk_[i][2][1];
+		if (0 <= a_x && a_x < N && 0 <= b_x && b_x < N && 0 <= c_x && c_x < N &&
+			0 <= a_y && a_y < M && 0 <= b_y && b_y < M && 0 <= c_y && c_y < M) {
+			int s = map[a_x][a_y]+map[b_x][b_y]+map[c_x][c_y]+map[x][y];
+			result.push_back(s);
+		}
+	}
+}
+int main() {
+	vec.assign(4, make_pair(0, 0));
+
+	cin >> N >> M;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			cin >> map[i][j];
+		}
+	}
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			vec[0].first = i;
+			vec[0].second = j;
+			func(1, i, j);
+			chk_add(i, j);
+		}
+	}
+	int Max = *max_element(result.begin(), result.end());
+	cout << Max;
+	return 0;
+}

@@ -1,0 +1,48 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int N, M;
+int arr[9];
+//int val[9][2];
+//bool visited[9];
+vector<pair<int, bool>> val;
+
+void func(int cnt) {
+	if (cnt == M) {
+		for (int i = 0; i < M; i++) {
+			cout << arr[i]<<" ";
+		}
+		cout << '\n';
+		return;
+	}
+	for (int i = 0; i < N; i++) {
+		/*
+		if (!val[i].second && val[i].first > arr[cnt-1]) {
+			arr[cnt] = val[i].first;
+			val[i].second = true;
+			func(cnt + 1);
+			val[i].second = false;
+		}
+		*/
+		arr[cnt] = val[i].first;
+		//val[i].second = true;
+		func(cnt + 1);
+		//val[i].second = false;
+	}
+}
+
+int main() {
+	int temp;
+	cin >> N >> M;
+	for (int i = 0; i < N; i++) {
+		cin >> temp;
+		val.push_back(pair<int,bool>(temp,false));
+	}
+	sort(val.begin(), val.end());
+
+	func(0);
+
+	return 0;
+}

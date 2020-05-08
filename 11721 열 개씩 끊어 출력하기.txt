@@ -1,0 +1,20 @@
+#include <stdio.h>
+
+int main() {
+	
+	char arr[100] = {NULL};
+	int i,j;
+	int count = 0;
+	gets(arr);
+
+	for (i = 0; i < 100; i++) {
+		for (j = 0; j < 10; j++) {
+			putchar(arr[count++]);
+			if (arr[count] == NULL) {
+				exit(0);
+			}
+		}
+		printf("\n");
+	}
+	return 0;
+}

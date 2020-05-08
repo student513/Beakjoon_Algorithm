@@ -1,0 +1,40 @@
+#include <iostream>
+#include <queue>
+#include <cstring>
+using namespace std;
+
+queue<pair<int, int>> que;
+int Min[100001];
+int N, K;
+int temp, time;
+
+int main() {
+	memset(Min, 9999999, sizeof(Min));
+	cin >> N >> K;
+	temp = N;
+	que.push(make_pair(temp, 0));
+	//visited[temp] = true;
+
+	while (!que.empty()) {
+		int Move = que.front().first;
+		int Time = que.front().second;
+		que.pop();
+		if (Time< Min[Move])
+			Min[Move] = Time;
+		else continue;
+
+		//+1
+		if (0 <= Move + 1 && Move + 1 < 100001)
+			que.push(make_pair(Move + 1, Time + 1));
+
+		//-1
+		if (0 <= Move - 1 && Move - 1 < 100001)
+			que.push(make_pair(Move - 1, Time + 1));
+		//*2
+		if (0 <= Move * 2 && Move * 2 < 100001)
+			que.push(make_pair(Move * 2, Time));
+	}
+
+	cout << Min[K];
+	return 0;
+}

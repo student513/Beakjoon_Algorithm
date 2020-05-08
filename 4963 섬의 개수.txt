@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+#include <cstring>
+#include <queue>
+using namespace std;
+
+vector<pair<int,int>> vec[51];
+queue<pair<int,int>> que;
+int map[51][51];
+bool visited[51][51];
+int dir[8][2] = { {-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1},{-1,-1} };
+int w, h;
+int result;
+
+void bfs(int x, int y) {
+	int curr_x, curr_y;
+	visited[x][y] = true;
+	que.push(make_pair(x, y));
+	while (!que.empty()) {
+		for (int i = 0; i < que.size(); i++) {
+			int curr_x = que.front().first; int curr_y = que.front().second;
+			que.pop();
+			for (int k = 0; k < 8; k++) {
+				int dir_x = curr_x + dir[k][0]; int dir_y = curr_y + dir[k][1];
+				if (0 <= dir_x && dir_x < h && 0 <= dir_y && dir_y < w) {
+					if (!visited[dir_x][dir_y] && map[dir_x][dir_y] == 1) {
+						visited[dir_x][dir_y] = true;
+						que.push(make_pair(dir_x, dir_y));
+					}
+				}
+			}
+		}
+	}
+	result++;
+}
+
+int main() {
+	while (true) {
+		memset(map, 0, sizeof(map));
+		memset(visited, false, sizeof(visited));
+		result = 0;
+		cin >> w >> h;
+		if (!w && !h)break;
+		for (int i = 0; i < h; i++) {
+			for (int j = 0; j < w; j++) {
+				cin >> map[i][j];
+			}
+		}
+
+		for (int i = 0; i < h; i++) {
+			for (int j = 0; j < w; j++) {
+				if (map[i][j] && !visited[i][j]) {
+					bfs(i, j);
+					
+				}
+			}
+		}
+		cout << result << "\n";
+	}
+	return 0;
+}

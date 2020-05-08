@@ -1,0 +1,105 @@
+#include <iostream>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+int map[10][10];
+int n, m;
+char temp;
+int dirc[4][2] = { {-1,0}, {0,1},{1,0},{0,-1} };
+struct balls {
+	int depth = 0;
+	int bx, by, rx, ry;
+};
+int ibx, iby, irx, iry;
+int hx, hy;
+bool visited[10][10][10][10];
+queue<balls> que;
+int ans = -1;
+void move(int& x, int& y, int i) {
+	while (true) {
+		x += dirc[i][0];
+		y += dirc[i][1];
+
+		if (map[x][y] == 1) {
+			x -= dirc[i][0]; y -= dirc[i][1];
+			break;
+		}
+		if (map[x][y] == 2) {
+			break;
+		}
+	}
+}
+
+int main() {
+	cin >> n >> m;
+	for (int i = 0; i < n; i++) {
+		
+		for (int j = 0; j < m; j++) {
+			cin >> temp;
+			switch (temp) {
+			case '.':
+				map[i][j] = 0; break;
+			case '#':
+				map[i][j] = 1; break;
+			case 'O':
+				map[i][j] = 2; hx = i; hy = j; break;
+			case 'B':
+				ibx = i; iby = j; break;
+			case 'R':
+				irx = i; iry = j; break;
+			}
+		}
+	}
+
+	que.push({ 0,ibx,iby,irx,iry });
+	visited[ibx][iby][irx][iry]=true;
+
+	while (!que.empty()) {
+		balls curr = que.front(); que.pop();
+		//cout << curr.depth<<'\n';
+		if (curr.depth > 10) {
+			break;
+		}
+		if (hx == curr.rx && hy == curr.ry) {
+			ans = curr.depth;
+			break;
+		}
+		for (int i = 0; i < 4; i++) {
+			int rx = curr.rx; int ry = curr.ry;
+			int bx = curr.bx; int by = curr.by;
+			move(rx, ry, i);
+			move(bx, by, i);
+			
+			if (hx == bx && hy == by) {
+				continue;
+			}
+			
+
+			if (bx == rx && by == ry) {
+				switch (i) {
+				case 0:
+					curr.bx < curr.rx ? rx++ : bx++; break;
+				case 1:
+					curr.by < curr.ry ? by-- : ry--; break;
+				case 2:
+					curr.bx < curr.rx ? bx-- : rx--; break;
+				case 3:
+					curr.by < curr.ry ? ry++ : by++; break;
+				}
+			}
+
+			if (!visited[bx][by][rx][ry]) {
+				balls next = { curr.depth + 1,bx,by,rx,ry };
+				que.push(next);
+				visited[bx][by][rx][ry] = true;
+			}
+			
+		}
+		
+	}
+	
+	cout << ans;
+
+	return 0;
+}

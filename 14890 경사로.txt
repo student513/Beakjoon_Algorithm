@@ -1,0 +1,107 @@
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+using namespace std;
+int map[101][101];
+bool visited[101];
+int N, L, path;
+
+void checkRow(int x) {
+	int cur = map[x][0]; //visited[0] = true;
+	int depth = -1;
+
+	for (int i = 0; i < N; i++) {
+		
+		if (cur != map[x][i]) {
+			//visited[i] = true;
+			if (abs(cur - map[x][i]) > 1) return;
+
+			//내리막길
+			if (cur > map[x][i]) {
+				depth = map[x][i];
+				for (int j = i; j < i + L; j++) {
+					if (!visited[j] && map[x][j] == depth) {
+						visited[j] = true;
+					}
+					else return;
+				}
+				cur = depth;
+				//i++;
+			}
+			//오르막길
+			else if (cur < map[x][i]) {
+				depth = cur;
+				for (int j = i - 1; j >= i - L; j--) {
+					if (map[x][j] != depth || visited[j] || j<0) {
+						return;
+					}
+					visited[j] = true;
+				}
+				//i += L;
+				cur = map[x][i];
+			}
+		}
+	}
+	path++;
+}
+void checkCol(int x) {
+	int cur = map[0][x]; //visited[0] = true;
+	int depth = -1;
+
+	for (int i = 0; i < N; i++) {
+
+		if (cur != map[i][x]) {
+			//visited[i] = true;
+			if (abs(cur - map[i][x]) > 1) return;
+
+			//내리막길
+			if (cur > map[i][x]) {
+				depth = map[i][x];
+				for (int j = i; j < i + L; j++) {
+					if (!visited[j] && map[j][x] == depth) {
+						visited[j] = true;
+					}
+					else return;
+				}
+				cur = depth;
+				//i++;
+			}
+			//오르막길
+			else if (cur < map[i][x]) {
+				depth = cur;
+				for (int j = i - 1; j >= i - L; j--) {
+					if (map[j][x] != depth || visited[j]) {
+						return;
+					}
+					visited[j] = true;
+				}
+				//i += L;
+				cur = map[i][x];
+			}
+		}
+	}
+	path++;
+}
+int main() {
+	cin >> N >> L;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			cin >> map[i][j];
+		}
+	}
+
+	
+	for (int i = 0; i < N; i++) {
+		memset(visited, false, sizeof(visited));
+		checkRow(i);
+	}
+	
+	for (int i = 0; i < N; i++) {
+		memset(visited, false, sizeof(visited));
+		checkCol(i);
+	}
+	
+	cout << path;
+
+	return 0;
+}

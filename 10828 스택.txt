@@ -1,0 +1,54 @@
+#include <iostream>
+#include <string>
+#include <stack>
+
+using namespace std;
+
+int main() {
+	stack <int> stk;
+	string arr[10001];
+	int num;
+	int temp;
+	cin >> num;
+
+
+	for (int i = 0; i < num; i++) {
+		cin >> arr[i];
+
+		if (arr[i] == "push") {//문자열에 공백을 삽입할 수 있을까?
+			cin >> temp;//back(): 배열의 마지막 셀 반환
+			stk.push(temp);
+		}
+		else if (arr[i] == "top") {
+			if (!stk.empty())
+				cout << stk.top()<<"\n";
+			else
+				cout << "-1" << "\n";
+		}
+		else if (arr[i] == "size") {
+			cout << stk.size()<<"\n";
+		}
+		else if (arr[i] == "empty") {
+			cout << stk.empty() << "\n";
+		}
+		else if (arr[i] == "pop") {
+			if (stk.empty()) {
+				cout << "-1"<<"\n";
+			}
+			else {
+				cout << stk.top() << "\n";
+				stk.pop();
+			}
+			/*
+			if (stk.top()) {
+				cout << stk.top() << "\n";
+				stk.pop();
+			}
+			else {
+				cout << "-1"<<"\n";
+			}
+			*/
+		}
+	}
+	return 0;
+}

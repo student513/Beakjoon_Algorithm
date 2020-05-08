@@ -1,0 +1,102 @@
+#include <cstdio>
+#include <algorithm>
+#include <iostream>
+#include <deque>
+using namespace std;
+int dir[4][2] = { {-1,0},{0,1},{1,0},{0,-1} };
+int map[21][21], dice[7], temp[7];
+int N, M, x, y, K;
+deque<int> cmd_list;
+void north() {
+	temp[1] = dice[1]; temp[2] = dice[2]; temp[5] = dice[5]; temp[6] = dice[6];
+	dice[2] = temp[1];
+	dice[6] = temp[2];
+	dice[5] = temp[6];
+	dice[1] = temp[5];
+}
+void south() {
+	temp[1] = dice[1]; temp[2] = dice[2]; temp[5] = dice[5]; temp[6] = dice[6];
+	dice[1] = temp[2];
+	dice[5] = temp[1];
+	dice[6] = temp[5];
+	dice[2] = temp[6];
+}
+void west() {
+	temp[1] = dice[1]; temp[3] = dice[3]; temp[6] = dice[6]; temp[4] = dice[4];
+	dice[3] = temp[1];
+	dice[6] = temp[3];
+	dice[4] = temp[6];
+	dice[1] = temp[4];
+}
+void east() {
+	temp[1] = dice[1]; temp[3] = dice[3]; temp[6] = dice[6]; temp[4] = dice[4];
+	dice[6] = temp[4];
+	dice[3] = temp[6];
+	dice[1] = temp[3];
+	dice[4] = temp[1];
+}
+
+int main() {
+	cin >> N >> M >> x >> y >> K;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			cin >> map[i][j];
+		}
+	}
+	for (int i = 0; i < K; i++) {
+		int temp;
+		cin >> temp;
+		cmd_list.push_back(temp);
+	}
+
+	while (!cmd_list.empty()) {
+		int cmd = cmd_list.front(); cmd_list.pop_front();
+		if (cmd == 1) {
+			int dir_x = x + dir[1][0]; int dir_y = y + dir[1][1];
+			if (0 > dir_x || dir_x >= N || 0 > dir_y || dir_y >= M)continue;
+			east();
+			x = dir_x; y = dir_y;
+			if (map[x][y] == 0)map[x][y] = dice[6];
+			else {
+				dice[6] = map[x][y];
+				map[x][y] = 0;
+			}
+		}
+		else if (cmd == 2) {
+			int dir_x = x + dir[3][0]; int dir_y = y + dir[3][1];
+			if (0 > dir_x || dir_x >= N || 0 > dir_y || dir_y >= M)continue;
+			west();
+			x = dir_x; y = dir_y;
+			if (map[x][y] == 0)map[x][y] = dice[6];
+			else {
+				dice[6] = map[x][y];
+				map[x][y] = 0;
+			}
+		}
+		else if (cmd == 3) {
+			int dir_x = x + dir[0][0]; int dir_y = y + dir[0][1];
+			if (0 > dir_x || dir_x >= N || 0 > dir_y || dir_y >=M)continue;
+			north();
+			x = dir_x; y = dir_y;
+			if (map[x][y] == 0)map[x][y] = dice[6];
+			else {
+				dice[6] = map[x][y];
+				map[x][y] = 0;
+			}
+		}
+		else if (cmd == 4) {
+			int dir_x = x + dir[2][0]; int dir_y = y + dir[2][1];
+			if (0 > dir_x || dir_x >= N || 0 > dir_y || dir_y >= M)continue;
+			south();
+			x = dir_x; y = dir_y;
+			if (map[x][y] == 0)map[x][y] = dice[6];
+			else {
+				dice[6] = map[x][y];
+				map[x][y] = 0;
+			}
+			
+		}
+		cout << dice[1] << '\n';
+	}
+	return 0;
+}
