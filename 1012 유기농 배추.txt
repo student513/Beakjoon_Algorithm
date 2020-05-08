@@ -1,0 +1,48 @@
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+int addx[] = { 1,0,-1,0 };
+int addy[] = { 0,-1,0,1 };
+int bat[51][51];
+bool visited[51][51];
+int T, M, N, K;
+
+void dfs(int x,int y) {//좌표
+	if (visited[x][y]) return;
+	visited[x][y] = true;
+
+	for (int i = 0; i < 4; i++) {
+		int adjX = addx[i] + x, adjY = y + addy[i];
+		if (0 <= adjX && adjX < M && 0 <= adjY && adjY < N && bat[x][y] == 1) {
+			dfs(adjX, adjY);
+		}
+	}
+}
+
+int main() {
+	cin >> T;
+	for (int k = 0; k < T; k++) {
+		int count = 0;
+		cin >> M >> N >> K;
+		memset(bat, 0, sizeof(bat));
+		memset(visited, 0, sizeof(visited));
+		for (int i = 0; i < K; i++) {
+			int X, Y;
+			cin >> X >> Y;
+			bat[X][Y] = 1;
+		}
+
+		for (int i = 0; i < M; i++) {
+			for (int j = 0; j < N; j++) {
+				if (visited[i][j] == false && bat[i][j] == 1) {
+					dfs(i, j);
+					count++;
+				}
+			}
+		}
+
+		cout << count << endl;
+	}
+	return 0;
+}

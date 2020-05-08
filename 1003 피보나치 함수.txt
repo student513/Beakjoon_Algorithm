@@ -1,0 +1,28 @@
+#include <iostream>
+using namespace std;
+
+int DP[2][41];
+
+int main() {
+	int num,temp;
+	cin >> temp;
+	for (int k = 0; k < temp; k++) {
+		cin >> num;
+
+		DP[0][0] = 1; DP[1][0] = 0;
+		DP[0][1] = 0; DP[1][1] = 1;
+		DP[0][2] = 1; DP[1][2] = 1;
+
+		for (int i = 3; i <= num; i++) {
+			for (int j = 0; j <= 1; j++) {
+				if (j == 0)
+					DP[j][i] = DP[j + 1][i - 1];
+				else
+					DP[j][i] = DP[j - 1][i - 1] + DP[j][i - 1];
+			}
+		}
+
+		cout << DP[0][num] << ' ' << DP[1][num]<<'\n';
+	}
+	return 0;
+}
