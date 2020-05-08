@@ -1,0 +1,30 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <deque>
+using namespace std;
+vector<int> vec;
+int M, N,sum;
+int main() {
+	cin >> M >> N;
+	if (M > N) {
+		vec.push_back(N);
+		while (1) {
+			vec.push_back(--M); if (vec.back() == 1)break;
+			vec.push_back(--N); if (vec.back() == 1)break;
+		}
+	}
+	else if (M < N) {
+		vec.push_back(N);
+		while (1) {
+			vec.push_back(--M); if (vec.back() == 1)break;
+			vec.push_back(--N); if (vec.back() == 1)break;
+		}
+	}
+	else {
+		sum = (M - 1) * 2;
+		cout << sum; return 0;
+	}
+	cout << vec.size();
+	return 0;
+}

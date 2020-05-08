@@ -1,0 +1,75 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+vector<int> vec[1001];
+queue<int> que;
+bool visited_d[1001];
+bool visited_b[1001];
+
+void dfs(int curr) {
+	if (!visited_d[curr]) {
+		visited_d[curr] = true;
+		cout << curr << " ";
+	}
+	for (int j = 0; j < vec[curr].size(); j++)
+		if (!visited_d[vec[curr][j]])
+			dfs(vec[curr][j]);
+}
+
+void bfs(int start) {
+	int curr;
+	if (!visited_b[start]) {
+		visited_b[start] = true;
+		cout << start << " ";
+		que.push(start);
+	}
+	while (!que.empty()) {
+		for (int i = 0; i < que.size(); i++) {
+			//sort(que.front, que.back);
+			curr = que.front(); que.pop();
+			for (int j = 0; j < vec[curr].size(); j++){
+				int next = vec[curr][j];
+				if (!visited_b[next]) {
+					cout << next << " ";
+					visited_b[next] = true;
+					que.push(next);
+				}
+			}
+		}
+	}
+}
+
+int main() {
+	int N, M, V;
+	int u, v;
+	cin >> N >> M >> V;
+	for (int i = 0; i < M; i++) {
+		cin >> u >> v;
+		vec[u].push_back(v);
+		vec[v].push_back(u);
+	}
+
+	for (int i = 1; i <= N; i++) {
+		sort(vec[i].begin(), vec[i].end());
+	}
+
+	dfs(V);
+	cout << endl;
+	bfs(V);
+
+	/*
+	for (int i = V; i <= M; i++) 
+		dfs(i);
+	for (int i = 1; i <= M - V; i++)
+		dfs(i);
+	cout << endl;
+	for (int i = V; i <= M; i++)
+		bfs(i);
+	for (int i = 1; i <= M - V; i++)
+		bfs(i);
+	*/
+	return 0;
+}

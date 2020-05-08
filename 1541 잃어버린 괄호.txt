@@ -1,0 +1,69 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+string N;
+vector<int> v;
+
+int rtn_num(char a) {
+	switch (a){
+	case '0': return 0;
+	case '1': return 1;
+	case '2': return 2;
+	case '3': return 3;
+	case '4': return 4;
+	case '5': return 5;
+	case '6': return 6;
+	case '7': return 7;
+	case '8': return 8;
+	case '9': return 9;
+	default: break;
+	}
+}
+bool chk_num(char a) {
+	if (a == '+' || a == '-')return false;
+	return true;
+}
+int main() {
+	cin >> N;
+	int pm = 1;
+	int temp=0;
+	for (int i = 0; i < N.length(); i++) {
+		if (!chk_num(N[i])) {
+			v.push_back(temp);
+			if (N[i] == '-') pm = -1;
+			else pm = 1;
+			temp = 0;
+		}
+		else {
+			if (temp == 0)temp += rtn_num(N[i])*pm;
+			else {
+				temp *= 10;
+				if(pm==1) temp += rtn_num(N[i]);
+				else temp -= rtn_num(N[i]);
+			}
+		}
+		if (i == N.length() - 1) { v.push_back(temp); }
+	}
+
+	int sum = v[0];
+	if (v[0] >= 0)pm = 1;
+	else pm = -1;
+	for (int i = 1; i < v.size(); i++) {
+		if (pm == -1) {
+			if (v[i] >= 0)sum -= v[i];
+			else sum += v[i];
+		}
+		else {
+			if (v[i] >= 0)sum += v[i];
+			else {
+				sum += v[i];
+				pm = -1;
+			}
+		}
+	}
+	cout << sum;
+	return 0;
+}

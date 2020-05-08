@@ -1,0 +1,45 @@
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+#include <vector>
+#include <cstdio>
+using namespace std;
+
+int T,N, temp1,temp2;
+vector<pair<int,int>> vec;
+
+bool compare(pair<int,int> a, pair<int,int> b) {
+	return a.first > b.first;
+}
+void print() {
+	cout << '\n';
+	for (int i = 0; i < N; i++) {
+		cout << vec[i].first << " " << vec[i].second << "\n";
+	}
+}
+
+int main() {
+	scanf("%d", &T);
+	while (T--) {
+		vec.clear();
+		scanf("%d", &N);
+		int cnt = N;
+		for (int i = 0; i < N; i++) {
+			scanf("%d %d", &temp1,&temp2);
+			vec.push_back(make_pair(temp1, temp2));
+		}
+		sort(vec.begin(), vec.end(), compare);
+
+		for (int i = 0; i < N; i++) {
+			int cmp = vec[i].second;
+			for (int j = i+1; j < N; j++) {
+				if (vec[j].second <= cmp) {
+					cnt--; break;
+				}
+			}
+		}
+		//print();
+		printf("%d\n", cnt);
+	}
+	return 0;
+}

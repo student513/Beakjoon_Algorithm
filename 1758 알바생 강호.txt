@@ -1,0 +1,27 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int N;
+vector<long long int> vec;
+bool compare(int a, int b) {
+	return a > b;
+}
+
+int main(){
+	cin >> N;
+	for (int i = 0; i < N; i++) {
+		int temp;
+		cin >> temp;
+		vec.push_back(temp);
+	}
+	sort(vec.begin(), vec.end(), compare);
+	long long int sum = 0;
+	for (int i = 0; i < vec.size(); i++) {
+		if(vec[i]-i>0)
+			sum += vec[i] - i;
+	}
+	cout << sum;
+	return 0;
+}

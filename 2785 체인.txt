@@ -1,0 +1,34 @@
+#include <iostream>
+#include <deque>
+#include <algorithm>
+using namespace std;
+int N, result;
+deque<int> dq;
+
+int main() {
+	cin >> N;
+	for (int i = 0; i < N; i++) {
+		int temp;
+		cin >> temp;
+		dq.push_back(temp);
+	}
+	sort(dq.begin(), dq.end());
+	//dq.size()는 체인의 수
+	//front()의 고리를 하나씩 줄이면서 뒤의 체인부터 이어준다
+	//front()가 0이 되면 pop하고 반복
+	//최종적인 dq.size가 정답
+	int gori = dq[0];
+	while (true) {
+		if (gori == 0) {
+			dq.pop_front();
+			if(!dq.empty())gori = dq.front();
+			else break;
+		}
+		if (dq.size() == 1)break;
+		gori--;
+		dq.pop_back();
+		result++;
+	}
+	cout << result;
+	return 0;
+}

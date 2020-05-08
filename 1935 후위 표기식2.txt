@@ -1,0 +1,59 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cstdio>
+using namespace std;
+
+int N; string str;
+vector<pair<char, int>> v;
+vector<double> stk;
+int main() {
+	cin >> N;
+	cin >> str;
+	for (int i = 0; i < N; i++) {
+		int temp;
+		cin >> temp;
+		v.push_back(make_pair(char(65 + i), temp));
+	}
+	/*
+	for (int i = 0; i < v.size(); i++) {
+		cout << v[i].first << " " << v[i].second<<'\n';
+	}*/
+	for (int i = 0; i < str.length(); i++) {
+		if (str[i] == '+') {
+			double second = stk.back(); stk.pop_back();
+			double first = stk.back(); stk.pop_back();
+			double result = first + second;
+			stk.push_back(result);
+		}
+		else if (str[i] == '-') {
+			double second = stk.back(); stk.pop_back();
+			double first = stk.back(); stk.pop_back();
+			double result = first - second;
+			stk.push_back(result);
+		}
+		else if (str[i] == '*') {
+			double second = stk.back(); stk.pop_back();
+			double first = stk.back(); stk.pop_back();
+			double result = first * second;
+			stk.push_back(result);
+		}
+		else if (str[i] == '/') {
+			double second = stk.back(); stk.pop_back();
+			double first = stk.back(); stk.pop_back();
+			double result = first / second;
+			stk.push_back(result);
+		}
+		else {
+			for (int j = 0; j < v.size(); j++) {
+				if (v[j].first == str[i]) {
+					double temp = v[j].second;
+					stk.push_back(temp);
+					break;
+				}
+			}
+		}
+	}
+	printf("%.2f",stk[0]);
+	return 0;
+}

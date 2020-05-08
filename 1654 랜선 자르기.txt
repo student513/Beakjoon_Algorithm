@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <cstdio>
+#include <algorithm>
+using namespace std;
+
+vector<int> vec;
+
+int main() {
+	int K, N, num;
+	long long int max;
+	cin >> K >> N;
+	for (int i = 0; i < K; i++) {
+		cin >> num;
+		vec.push_back(num);
+	}
+	sort(vec.begin(), vec.end());
+
+	long long int left = 0;
+	long long int right = vec.back();
+	
+	while (1) {
+		long long int line_num = 0;
+		long long int mid = (left + right) / 2;
+		if (mid == 0) mid = 1;
+		//mid 길이로 잘랐을 때 얻을 수 있는 랜선 갯수 line_num
+		for (int i = 0; i < K; i++) {
+			line_num += (long long int)(vec[i] / mid);
+		}
+
+		max = mid;
+		//이분 탐색 (left<right에서 left<=right로 수정)
+		if (left <= right) {
+			if (line_num > N) {
+				left = mid + 1;
+			}
+			else if (line_num < N) {
+				right = mid - 1;
+			}
+			else if (line_num == N) {
+				//max 길이의 랜선을 찾았지만 계속 우측 구간으로 길이 갱신
+				max = mid;
+				left = mid + 1;
+			}
+		}
+		else
+			break;
+	}
+	cout << max;
+
+	return 0;
+}

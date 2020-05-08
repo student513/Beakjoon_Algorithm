@@ -1,0 +1,31 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+int arr[11];
+int line[11];
+int N;
+int main() {
+	cin >> N;
+	for (int i = 1; i <= N; i++)cin >> arr[i];
+	
+	for (int i = 1; i <= N; i++) {
+		int index = 0;
+		int cnt = 0;
+		for (int j = 1; j <= N; j++) {
+			if (line[j] != 0) {index++; continue;}
+			if (cnt == arr[i]) {
+				line[index + 1] = i;
+				break;
+			}
+			if (line[j] == 0) { index++; cnt++; }
+			
+			
+		}
+	}
+
+
+	for (int i = 1; i <= N; i++) {
+		cout << line[i] << " ";
+	}
+	return 0;
+}

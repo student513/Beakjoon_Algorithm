@@ -1,0 +1,32 @@
+#include <iostream>
+using namespace std;
+int N, M;
+int arr[6] = { 0,1,2,2,2,1 };
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> N >> M;
+	long long gop = M / arr[N];
+	long long na = M % arr[N];
+	long long result = (gop + na) * 8;
+	if (na == 1) {
+		switch (N){
+		case 2:result -= 0; break;
+		case 3:result -= 1; break;
+		case 4:result -= 2; break;
+		}
+		cout << result-1;
+	}
+	else {
+		switch (N) {
+		case 1:result += 0; break;
+		case 2:result += 1; break;
+		case 3:result += 2; break;
+		case 4:result += 3; break;
+		case 5:result += 4; break;
+		}
+		cout << result;
+	}
+	
+	return 0;
+}

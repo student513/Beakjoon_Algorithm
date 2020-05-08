@@ -1,0 +1,17 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+long long int X, Y, W, S, sum_c, sum_a, sum_b;
+int main() {
+	cin >> X >> Y >> W >> S;
+	sum_c = -1;
+
+	sum_a = (X + Y)*W;//가로세로
+	sum_b = min(X, Y)*S + (max(X, Y) - min(X, Y))*W;//대각+가로세로
+	if ((X + Y) % 2 == 0)sum_c = max(X, Y)*S;//대각
+	else sum_c = (max(X, Y) - 1)*S + W;
+	long long int temp=min(sum_a, sum_b);
+	cout << min(temp, sum_c);
+	return 0;
+}

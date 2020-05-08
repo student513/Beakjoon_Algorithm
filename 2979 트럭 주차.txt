@@ -1,0 +1,29 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <cstdlib>
+#include <string>
+#include <deque>
+using namespace std;
+int tax[4];
+int arr[101],Max,sum;
+int time[3][2];
+int main() {
+	cin >> tax[1] >> tax[2] >> tax[3];
+	for (int i = 0; i < 3; i++) {
+		cin >> time[i][0] >> time[i][1];
+		if (time[i][0] > Max)Max = time[i][0];
+		if (time[i][1] > Max)Max = time[i][1];
+	}
+	for (int i = 0; i < 3; i++) {
+		for (int j = time[i][0]; j < time[i][1]; j++) {
+			arr[j]++;
+		}
+	}
+
+	for (int i = 1; i < Max; i++) {
+		sum += tax[arr[i]] * arr[i];
+	}
+	cout << sum;
+	return 0;
+}

@@ -1,0 +1,147 @@
+#include <stdio.h>
+#include <malloc.h>
+
+void swap(int *arr, int i, int j);
+void bubbleup(int *arr, int i);
+void insert(int *arr, int data, int *idx);
+void bubbledown(int *arr, int i, int idx);
+void del(int *arr, int *idx);
+
+int main() {
+	int a_num, b_num;
+	int i;
+	int count = 0;
+	int val;
+	int a_idx = 0, b_idx = 0;
+	scanf("%d %d", &a_num, &b_num);
+
+	int *arr_a = (int*)malloc(sizeof(int)*(a_num));
+	int *arr_b = (int*)malloc(sizeof(int)*(b_num));
+	
+	for (i = 0; i < a_num; i++) {
+		scanf("%d", &arr_a[i]);
+	}
+	for (i = 0; i < b_num; i++) {
+		scanf("%d", &arr_b[i]);
+	}
+
+	int *a_heap = (int*)malloc(sizeof(int)*(a_num + 1));
+	int *b_heap = (int*)malloc(sizeof(int)*(b_num + 1));
+	
+	for (i = 0; i < a_num; i++) {
+		insert(a_heap, arr_a[i], &a_idx);
+	}
+	for (i = 0; i < b_num; i++) {
+		insert(b_heap, arr_b[i], &b_idx);
+	}
+	/*
+	for (i = 1; i <= a_num; i++) {
+		printf("%d ", a_heap[i]);
+	}
+	printf("%\n");
+	for (i = 1; i <= b_num; i++) {
+		printf("%d ", b_heap[i]);
+	}
+	printf("\n");
+	*/
+	
+	int *a_sol = (int*)calloc(sizeof(int), a_num+1);
+	while (a_idx != 0) {
+		if (b_idx == 0) {
+			a_sol[count++] = a_heap[1];
+			del(a_heap, &a_idx);
+		}/*
+		else if (b_idx == 0 && a_idx == 0) {
+			break;
+		}
+		*/
+		else if (a_heap[1] == b_heap[1]) {
+			del(a_heap, &a_idx);
+			del(b_heap, &b_idx);
+		}
+		else if (a_heap[1] > b_heap[1]) {
+			del(b_heap, &b_idx);
+			/*if (a_heap[1] < b_heap[1]) {
+				a_sol[count++] = a_heap[1];
+				del(a_heap, &a_idx);
+			}*/
+		}
+		else if (a_heap[1] < b_heap[1]) {
+			a_sol[count++] = a_heap[1];
+			del(a_heap, &a_idx);
+		}
+	}
+	/*
+	for (i = 0; i <= a_num; i++) {
+		//arr_a의 마지막 원소까지 처리한 이후의 조건문
+		//a가 먼저 끝난경우
+		if (a_idx == 0)
+			break;
+		//b가 먼저 끝난경우
+		if (b_idx == 0) {
+			a_sol[count++] = a_heap[1];
+			del(a_heap, &a_idx);
+		}
+
+		if (a_heap[1] == b_heap[1]) {
+			del(a_heap,&a_idx);
+			del(b_heap,&b_idx);
+		}
+		else if (a_heap[1] > b_heap[1]) {
+			del(b_heap,&b_idx);
+			if (a_heap[1] < b_heap[1]) {
+				a_sol[count++] = a_heap[1];
+				del(a_heap, &a_idx);
+			}
+		}
+		else if (a_heap[1] < b_heap[1]) {
+			a_sol[count++] = a_heap[1];
+			del(a_heap,&a_idx);
+		}
+	}
+	*/
+
+	printf("%d\n", count);
+	for (i = 0; i < count; i++) {
+		printf("%d ", a_sol[i]);
+
+	}
+	
+	free(arr_a);
+	free(arr_b);
+	free(a_sol);
+	return 0;
+}
+
+
+void swap(int *arr, int i, int j) {
+	int tmp = arr[i];
+	arr[i] = arr[j];
+	arr[j] = tmp;
+}
+void bubbleup(int *arr, int i) {
+	if (i > 1 && arr[i] < arr[i / 2]) {
+		swap(arr, i, i / 2);
+		bubbleup(arr, i / 2);
+	}
+}
+void insert(int *arr, int data, int *idx) {
+	arr[++(*idx)] = data;
+	bubbleup(arr, *idx);//값 자체를 넘겨야 하므로 *idx, idx를 인자로 넣는다면 포인터를 넘긴게 됨
+}
+void bubbledown(int *arr, int i, int idx) {
+	int child;
+
+	child = 2 * i;
+	if (child < idx && arr[child + 1] < arr[child]) child++;
+	if (child <= idx && arr[i] > arr[child]) {
+		swap(arr, i, child);
+		bubbledown(arr, child, idx);
+	}
+}
+
+void del(int *arr, int *idx) {
+	swap(arr, 1, *idx);//값 자체를 넘겨야 하므로 *idx
+	--(*idx);
+	bubbledown(arr, 1, *idx);//값 자체를 넘겨야 하므로 *idx
+}

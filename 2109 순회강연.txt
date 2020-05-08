@@ -1,0 +1,26 @@
+#include <iostream>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+priority_queue<int> pq;
+pair<int, int> arr[10001];
+int n,temp1,temp2,r;
+
+int main() {
+	cin >> n;
+	for (int i = 0; i < n; i++)
+		cin >> arr[i].second >> arr[i].first;
+	sort(arr, arr + n);
+
+	for (int i = 0; i < n; i++) {
+		r += arr[i].second;
+		pq.push(-arr[i].second);
+		if (pq.size() > arr[i].first) {
+			r += pq.top();
+			pq.pop();
+		}
+	}
+	cout << r;
+	return 0;
+}

@@ -1,0 +1,43 @@
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+long long int arr[1000001];
+
+int main() {
+	int N, M;
+	long long int sol;
+	cin >> N >> M;
+	for (int i = 0; i < N; i++) {
+		cin >> arr[i];
+	}
+	sort(arr, arr + N);
+	long long int start = 0;
+	long long int end = arr[N - 1];
+	while (start+1 != end) {
+		long long int mid = (start + end) / 2;
+		long long int result = 0;
+
+		for (int i = 0; i < N; i++) {
+			if (arr[i] - mid > 0) {
+				result += arr[i] - mid;
+			}
+		}
+
+		if (result >= M) {
+			start = mid;
+		}
+		else if (result < M) {
+			end = mid;
+		}
+		/*
+		else {
+			start = mid;
+			sol = mid;
+		}
+		*/
+	}
+	cout <<start;
+	return 0;
+}

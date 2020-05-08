@@ -1,0 +1,80 @@
+#include <iostream>
+#include <string>
+#include <queue>
+using namespace std;
+
+string input[102];
+int lab[102][102];
+bool visited[10002][10002];
+int dist[10004];
+int arrx[] = { 1,0,-1,0 };
+int arry[] = { 0 ,-1,0,1 };
+queue<int> que;
+
+int main() {
+	int N, M;
+	int count = 0;
+
+	cin >> N >> M;//데이터 입력
+	for (int i = 0; i < N; i++) {
+		cin >> input[i];
+	}
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			if(input[i][j]=='1')
+			lab[i+1][j+1] = true;
+		}
+	}
+
+	for (int i = 1; i <= N; i++) {//각 칸에 번호 매기기
+		for (int j = 1; j <= M; j++) {
+			if (lab[i][j])
+				lab[i][j] = ++count;
+		}
+	}
+
+	//인덱스 꼬임
+	for (int i = 1; i <= N; i++) {//칸의 연결상태를 인접배열로 구현
+		for (int j = 1; j <= M; j++) {
+			for (int k = 0; k < 4; k++) {
+				int adjX = i + arrx[k], adjY = j + arry[k];
+				if (1 <= adjX && adjX <= N && 1 <= adjY && adjY <= M) {
+					if (lab[adjX][adjY] != 0 && visited[adjX][adjY] == 0)
+						visited[lab[i][j]][lab[adjX][adjY]] = visited[lab[adjX][adjY]][lab[i][j]] = true;
+				}
+			}
+		}
+	}
+	
+	int start = 1;
+	que.push(start);
+	while (!que.empty()) {
+		int now = que.front();
+		que.pop();
+		for (int i = 1; i <= lab[N][M]; i++) {
+			if (visited[now][i] != 0 && dist[i] == 0) {
+				dist[i] = dist[now] + 1;
+				que.push(i);
+			}
+		}
+	}
+	
+	/*
+	cout << "\n";
+	for (int i = 1; i <= lab[N][M]; i++) {//visited 출력
+		for (int j = 1; j <= lab[N][M]; j++) {
+			printf("%d ", visited[i][j]);
+		}
+		cout << "\n";
+	}
+	cout << "\n";
+	for (int i = 1; i <= N; i++) {//lab 출력
+		for (int j = 1; j <= M; j++) {
+			printf("%3d",lab[i][j]);
+		}
+		cout << "\n";
+	}
+	*/
+	cout << dist[lab[N][M]]+1;
+	return 0;
+}

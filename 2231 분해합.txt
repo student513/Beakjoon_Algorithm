@@ -1,0 +1,27 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int N,result;
+void func(int num) {
+	int temp = num;
+	int chk = num;
+	while (temp >= 10) {
+		chk += temp % 10;
+		temp /= 10;
+	}
+	chk += temp % 10;
+	temp /= 10;
+	if (chk == N) {
+		result = num;
+	}
+}
+int main() {
+	cin >> N;
+	for (int i = N; i >= 0; i--) {
+		func(i);
+	}
+	cout << result;
+
+	return 0;
+}

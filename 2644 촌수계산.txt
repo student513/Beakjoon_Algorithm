@@ -1,0 +1,34 @@
+#include <iostream>
+#include <queue>
+
+using namespace std;
+
+bool visited[101][101];
+queue<int> que;
+int dist[101];
+
+int main() {
+	int n, P, C, m;
+	cin >> n >> P >> C >> m;
+	for (int i = 0; i < m; i++) {
+		int x, y;
+		cin >> x >> y;
+		visited[x][y] = visited[y][x] = true;
+	}
+
+	que.push(P);
+	while (!que.empty()) {
+		int now = que.front();
+		que.pop();
+		for (int i = 1; i <= n; i++) {
+			if (visited[now][i] != 0 && dist[i] == 0) {
+				dist[i] = dist[now] + 1;
+				que.push(i);
+			}
+		}
+	}
+
+	if (dist[C]) cout << dist[C];
+	else cout << -1;
+	return 0;
+}

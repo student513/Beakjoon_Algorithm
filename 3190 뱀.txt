@@ -1,0 +1,101 @@
+#include <cstdio>
+#include <algorithm>
+#include <iostream>
+#include <vector>
+#include <deque>
+using namespace std;
+int N, K, L, t1, t2, sec;
+int way = 1;
+int Time;
+char Turn;
+deque<pair<int, char>> turn;
+deque<pair<int, int>> body;
+int map[101][101];//1: apple, 2: body
+int dir[4][2] = { {-1,0},{0,1},{1,0},{0,-1} };
+
+bool crush_chk(int x,int y) {
+	if (1 > x || x >= N+1 || 1 > y || y >= N+1) return true;
+	for (int i = 0; i < body.size(); i++) {
+		if (body[i].first == x && body[i].second == y)
+			return true;
+	}
+	return false;
+}
+
+int main() {
+	cin >> N >> K;
+	for (int i = 1; i <= K; i++) {
+		cin >> t1 >> t2;
+		map[t1][t2] = 1;
+	}
+	cin >> L;
+	for (int i = 0; i < L; i++) {
+		char tc;
+		cin >> t1 >> tc;
+		turn.push_back(make_pair(t1, tc));
+	}
+
+	body.push_front(make_pair(1, 1));
+	for (int i = 0; i < turn[0].first; i++) {
+		int now_x = body.front().first + dir[1][0]; int now_y = body.front().second + dir[1][1];
+		sec++;
+		if(!crush_chk(now_x,now_y))
+			body.push_front(make_pair(now_x, now_y));
+		else {
+			cout << sec;
+			return 0;
+		}
+		if (map[now_x][now_y] == 0) {
+			body.pop_back();
+		}
+	}
+
+	if (turn[0].second == 'L') {
+		way -= 1;
+		if (way < 0)way += 4;
+	}
+	else {
+		way += 1;
+		if (way > 3)way -= 4;
+	}
+	turn.pop_front();
+
+	while (1) {
+		if(!turn.empty()) Time = turn.front().first; 
+		else Time = 987654321;
+
+		for (int i = sec; i < Time; i++) {
+			int now_x = body.front().first + dir[way][0]; int now_y = body.front().second + dir[way][1];
+			sec++;
+			if (!crush_chk(now_x, now_y))
+				body.push_front(make_pair(now_x, now_y));
+			else {
+				cout << sec;
+				return 0;
+			}
+
+			if (map[now_x][now_y] == 0) {
+				body.pop_back();
+			}
+			else {
+				map[now_x][now_y] = 0; 
+			}
+		}
+
+		if (!turn.empty()) {
+			Turn = turn.front().second;
+			turn.pop_front();
+
+			if (Turn == 'L') {
+				way -= 1;
+				if (way < 0)way += 4;
+			}
+			else {
+				way += 1;
+				if (way > 3)way -= 4;
+			}
+		}
+	}
+	
+	return 0;
+}

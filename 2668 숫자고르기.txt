@@ -1,0 +1,62 @@
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int arr[101];
+bool visited[101], temp_visited[101];
+int N, answer;
+vector<int> temp_a, temp_b;
+bool eq_chk() {
+	temp_a.clear();
+	temp_b.clear();
+	for (int i = 1; i <= N; i++) {
+		if (temp_visited[i]) {
+			temp_a.push_back(i);
+		}
+	}
+	for (int i = 0; i < temp_a.size(); i++) {
+		temp_b.push_back(arr[temp_a[i]]);
+	}
+	sort(temp_a.begin(), temp_a.end());
+	sort(temp_b.begin(), temp_b.end());
+
+	for (int i = 0; i < temp_a.size(); i++) {
+		if (temp_a[i] != temp_b[i])return false;
+	}
+
+	for (int i = 0; i < temp_a.size(); i++) {
+		visited[temp_a[i]] = true;
+	}
+	return true;
+}
+
+void dfs(int idx) {
+	//if (start == idx)return;
+	if (temp_visited[idx])return;
+	temp_visited[idx] = true;
+	dfs(arr[idx]);
+}
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> N;
+	for (int i = 1; i <= N; i++)cin >> arr[i];
+	for (int i = 1; i <= N; i++) {
+		memset(temp_visited, false, sizeof(temp_visited));
+		if (!visited[i]) {
+			dfs(i);
+		}
+		//temp_visited와 그의 값들이 같다면 answer에 +
+		if (eq_chk()) {
+			answer += temp_a.size();
+		}
+	}
+	cout << answer<<'\n';
+	for (int i = 1; i <= N; i++) {
+		if(visited[i])
+			cout << i << '\n';
+	}
+	return 0;
+}

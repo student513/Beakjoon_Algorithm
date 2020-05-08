@@ -1,0 +1,41 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+int cache[501][501];
+int height[501][501];
+
+int dx[] = { 1,0,-1,0 };
+int dy[] = { 0,1,0,-1 };
+
+int DP(int y, int x, int h, int w, int hei) {
+	if (x < 0 || x >= w || y < 0 || y >= h) 
+		return 0;
+	if (height[y][x] >= hei)
+		return 0;
+	if (y == h - 1 && x == w - 1)
+		return 1;
+	if (cache[y][x] >= 0)
+		return cache[y][x];
+
+	int result = 0;
+	for (int i = 0; i < 4; i++)
+		result += DP(y + dy[i], x + dx[i], h, w, height[y][x]);
+
+	cache[y][x] = result;
+
+	return result;
+}
+int main() {
+	memset(cache, -1, sizeof(cache));
+
+	int M, N;
+	cin >> M >> N;
+	for (int y = 0; y < M; y++) {
+		for (int x = 0; x < N; x++) {
+			cin >> height[y][x];
+		}
+	}
+	cout << DP(0, 0, M, N, height[0][0] + 1) << endl;
+	return 0;
+}

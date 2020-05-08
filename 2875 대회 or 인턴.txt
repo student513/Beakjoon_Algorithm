@@ -1,0 +1,17 @@
+#include <iostream>
+#include <cstdio>
+using namespace std;
+
+int N, M, K, cnt;
+int main() {
+	cin >> N >> M >> K;
+	for (int i = 50; i >= 0; i--) {
+		int n = N, m = M;
+		cnt = i;
+		n -= 2 * i;
+		m -= i;
+		if (n >= 0 && m >= 0 && n + m >= K)break;
+	}
+	cout << cnt;
+	return 0;
+}

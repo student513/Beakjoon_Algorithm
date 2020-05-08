@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+int main() {
+	int n;
+	int i;
+	double total = 0;
+	double ans;
+	scanf("%d", &n);
+
+	int *arr = (int*)malloc(sizeof(int)*n);
+	for (i = 0; i < n; i++) {
+		scanf("%d", &arr[i]);
+	}
+	for (i = 0; i < n; i++) {
+		total += arr[i];
+	}
+	total = total / n;
+
+	int max = 0;
+	//M구하기
+	for (i = 0; i < n; i++) {
+		if (max <= arr[i]) {
+			max = arr[i];
+		}
+	}
+	
+	printf("%lf", (double)total/(double)max*100);
+
+
+	return 0;
+}

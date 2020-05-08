@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <cstdio>
+using namespace std;
+
+int N, M, J, Move;
+vector<int> vec;
+vector<int> bsk;
+bool goal_in(int idx) {
+	for (int i = 0; i < bsk.size(); i++) {
+		if (bsk[i] == idx)return true;
+	}
+	return false;
+}
+void move_left() {
+	for (int i = 0; i < bsk.size(); i++) {
+		bsk[i]--;
+	}
+}
+void move_right() {
+	for (int i = 0; i < bsk.size(); i++) {
+		bsk[i]++;
+	}
+}
+int main() {
+	cin >> N >> M >> J;
+	for (int i = 0; i < J; i++) {
+		int temp;
+		cin >> temp;
+		vec.push_back(temp);
+	}
+	for (int i = 1; i <= M; i++)bsk.push_back(i);
+
+	for (int i = 0; i < vec.size(); i++) {
+		int apple = vec[i];
+		if(goal_in(apple))continue;
+		else {
+			if (apple < bsk.front()) {
+				while (bsk.front() != apple) {
+					move_left(); Move++;
+				}
+			}
+			else if (apple > bsk.front()) {
+				while (bsk.back() != apple) {
+					move_right(); Move++;
+				}
+			}
+		}
+	}
+	cout << Move;
+	return 0;
+}

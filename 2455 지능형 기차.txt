@@ -1,0 +1,22 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <deque>
+using namespace std;
+vector<pair<int, int>> vec;
+vector<int> r;
+int a, b,sum;
+int main() {
+	for (int i = 0; i < 4; i++) {
+		cin >> a >> b;
+		vec.push_back(make_pair(a, b));
+	}
+	for (int i = 0; i < 4; i++) {
+		int out = vec[i].first; int in = vec[i].second;
+		sum = sum - out + in;
+		r.push_back(sum);
+	}
+	int Max = *max_element(r.begin(), r.end());
+	cout << Max;
+	return 0;
+}

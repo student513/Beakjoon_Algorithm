@@ -1,0 +1,43 @@
+#include <stdio.h>
+
+double solve(int *arr, int score_num) {
+	int i;
+	double average = 0;
+	int count = 0;//평균이상 학생 수
+
+	for (i = 0; i < score_num; i++) {
+		average += arr[i];
+	}
+	average /= score_num;
+
+	for (i = 0; i < score_num; i++) {
+		if (arr[i] > average) {
+			count++;
+		}
+	}
+
+	return (double)count / (double)score_num * 100;
+}
+
+int main() {
+	int i, j, case_num;
+	int score_num;
+
+	scanf("%d", &case_num);//케이스가 몇 번있나?
+	double *solve_arr = (double*)malloc(sizeof(double)*case_num);//비율을 입력할 배열
+
+	for (i = 0; i < case_num; i++) {
+		scanf("%d", &score_num);//각 케이스마다 몇 개의 점수가 입력되나?
+		int *score_arr = (int*)malloc(sizeof(int)*score_num);//케이스마다 점수저장할 배열 동적할당
+		for (j = 0; j < score_num; j++) {
+			scanf("%d", &score_arr[j]);
+		}
+		solve_arr[i] = solve(score_arr, score_num);
+		free(score_arr);//같은 이름의 배열로 계속 할당할 경우 필수적으로 사용해야한다.
+	}
+
+	for (i = 0; i < case_num; i++) {
+		printf("%.3lf%%\n", solve_arr[i]);
+	}
+	return 0;
+}

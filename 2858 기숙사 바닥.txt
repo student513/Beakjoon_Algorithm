@@ -1,0 +1,32 @@
+#include <iostream>
+#include <cmath>
+#include <algorithm>
+#include <cstring>
+using namespace std;
+int R, B;
+int b_cnt, r_cnt;
+
+int main() {
+	cin >> R >> B;
+	int sum = R + B;
+	int l = 3;
+	while (l <= sqrt(sum)) {
+		if (sum%l != 0) {
+			l++; continue;
+		}
+		int w = sum / l;
+		
+		int r_cnt = w * 2 + (l - 2) * 2;
+		int b_cnt = w * l - r_cnt;
+		
+		//cout << '\n';for (int i = 0; i < l; i++) {for (int j = 0; j < w; j++) {cout << arr[i][j] << " ";}cout << '\n';}
+		
+		if (b_cnt == B && r_cnt == R) {
+			cout << max(w,l) << " " << min(w,l) << '\n';
+			break;
+		}
+
+		l++;
+	}
+	return 0;
+}

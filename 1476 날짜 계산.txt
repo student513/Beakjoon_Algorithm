@@ -1,0 +1,23 @@
+#include <iostream>
+using namespace std;
+
+int E, S, M;
+int y = 1;
+int arr[3] = { 1,1,1 };
+bool same() {
+	if (arr[0] == E && arr[1] == S && arr[2] == M) return true;
+	return false;
+}
+int main() {
+	cin >> E >> S >> M;
+	while (1) {
+		if (arr[0] == 16)arr[0] = 1;
+		if (arr[1] == 29)arr[1] = 1;
+		if (arr[2] == 20)arr[2] = 1;
+		if (same()) break;
+		arr[0]++; arr[1]++; arr[2]++;
+		y++;
+	}
+	cout << y;
+	return 0;
+}

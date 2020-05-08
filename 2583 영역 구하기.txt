@@ -1,0 +1,90 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+#define MAX 101
+
+vector<int> adj_list[10001];
+bool visited[10001];
+int arr[MAX][MAX];
+int addx[] = { -1,0,1,0 };
+int addy[] = { 0,1,0,-1 };
+int M, N, K, tmp;
+vector<int> value;
+void dfs(int curr) {
+	if (visited[curr])return;
+	visited[curr] = true;
+	if (visited[curr] == true)
+		tmp++;
+	for (int i = 0; i < adj_list[curr].size(); i++) {
+		if (!visited[adj_list[curr][i]])
+			dfs(adj_list[curr][i]);
+	}
+}
+int main() {
+	int lx, ly, rx, ry;
+	int c= 0;
+	cin >> M >> N >> K;
+
+	for (int i = 0; i < M; i++) {
+		for (int j = 0; j < N; j++) {
+			arr[i][j] = c++;
+		}
+	}
+	for (int i = 0; i < K; i++) {
+		cin >> lx >> ly >> rx >> ry;
+		for (int j = lx; j < rx; j++) {
+			for (int k = ly; k < ry; k++) {
+				arr[k][j] = -1;
+			}
+		}
+	}
+	
+	for (int i = 0; i < M; i++) {
+		for (int j = 0; j < N; j++) {
+			for (int k = 0; k < 4; k++) {
+				if (arr[i][j] >= 0) {
+					int adjx = i + addx[k]; int adjy = j + addy[k];
+					if (0 <= adjx && adjx < M && 0 <= adjy && adjy < N ) {
+						if(arr[adjx][adjy] >= 0)
+							adj_list[arr[i][j]].push_back(arr[adjx][adjy]);
+					}
+				}
+			}
+		}
+	}
+	for (int i = 0; i < M; i++) {
+		for (int j = 0; j < N; j++) {
+			if (arr[i][j] >= 0) {
+				tmp = 0;
+				dfs(arr[i][j]);
+				if (tmp!=0)
+					value.push_back(tmp);
+			}
+		}
+	}
+	sort(value.begin(), value.end());
+	cout << value.size()<<"\n";
+	for (int i = 0; i < value.size(); i++) {
+		if (value[i] > 0) {
+			cout << value[i]<<" ";
+		}
+	}
+	cout << "\n";
+	/*
+	for (int i = 0; i <= arr[M - 1][N - 1]; i++) {
+		for (int j = 0; j < adj_list[i].size(); j++) {
+			cout << adj_list[i][j]<<" ";
+		}
+		cout << '\n';
+	}
+	
+	for (int i = 0; i < M; i++) {
+		for (int j = 0; j < N; j++) {
+			printf("%3d",arr[i][j]);
+		}
+		cout << '\n';
+	}
+	*/
+	return 0;
+}

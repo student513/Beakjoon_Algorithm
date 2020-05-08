@@ -1,0 +1,67 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+//문자열의 숫자를 합하는 함수
+/*
+int sum_num(string a) {
+	int sum = 0;
+	for (int i = 0; i < a.length(); i++) {
+		switch (a[i])
+		{
+		case '0': sum += 0; break;
+		case '1': sum += 1; break;
+		case '2': sum += 2; break;
+		case '3': sum += 3; break;
+		case '4': sum += 4; break;
+		case '5': sum += 5; break;
+		case '6': sum += 6; break;
+		case '7': sum += 7; break;
+		case '8': sum += 8; break;
+		case '9': sum += 9; break;
+		default: break;
+		}
+	}
+	return sum;
+}
+*/
+int sum_num(string a) {
+	int sum = 0;
+	for (int i = 0; i < a.size(); i++) {
+		if ('0' <= a[i] && a[i] <= '9')
+			sum += a[i] - '0';
+	}
+	return sum;
+}
+bool compare_func(string a, string b) {
+	if (a.length() != b.length())
+		return a.length() < b.length();
+	else if (a.length() == b.length()) {
+		if (sum_num(a) != sum_num(b)) {
+			return sum_num(a) < sum_num(b);
+		}
+		else if (sum_num(a) == sum_num(b)) {
+			//자릿수를 합했을때 동일한 값이라면 사전순으로
+			return a < b;
+		}
+	}
+}
+
+int main() {
+	int num;
+	string arr[1001];
+
+	cin >> num;
+	for (int i = 0; i < num; i++) {
+		cin >> arr[i];
+	}
+
+	sort(arr, arr + num, compare_func);
+
+	for (int i = 0; i < num; i++) {
+		cout << arr[i] << "\n";
+	}
+
+	return 0;
+}

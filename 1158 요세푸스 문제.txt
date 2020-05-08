@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+struct node {
+	int num;
+	node *next=NULL;
+	bool visit;
+}typedef node;
+
+int n, k;
+
+int main() {
+	cin >> n >> k;
+	node *arr = (node*)malloc(sizeof(node)*n);
+	for (int i = 0; i < n; i++) {
+		if (i == n - 1) {
+			arr[i].num = i + 1;
+			arr[i].next = &arr[0];
+			arr[i].visit = false;
+		}
+		else {
+			arr[i].num = i + 1;
+			arr[i].next = &arr[i + 1];
+			arr[i].visit = false;
+		}
+	}
+	arr[n - 1].next = &arr[0];
+
+	int cnt = 1, N=0;
+	node *temp = &arr[0];
+	cout << "<";
+	while (1) {
+		
+		if (temp->visit==false && cnt == k) {
+			N++;
+			temp->visit = true;
+			if(N<n)cout << temp->num<<", ";
+			else cout << temp->num << ">";
+			cnt = 0;
+			
+		}
+		else {
+			cnt++;
+			while(temp->next->visit)
+				temp = temp->next;
+			temp = temp->next;
+		}
+		if (N == n)break;
+	}
+	
+	
+
+	return 0;
+}

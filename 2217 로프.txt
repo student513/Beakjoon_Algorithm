@@ -1,0 +1,26 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+vector<int> lp;
+int N,temp;
+bool compare(int a, int b) {
+	return a > b;
+}
+
+int main() {
+	cin >> N;
+	for (int i = 0; i < N; i++) {
+		cin >> temp;
+		lp.push_back(temp);
+	}
+	sort(lp.begin(), lp.end(), compare);
+
+	int Max = -1;
+	for (int i = 0; i < N; i++) {
+		if ((i+1)*lp[i] > Max)
+			Max = (i+1) * lp[i];
+	}
+	cout << Max;
+	return 0;
+}

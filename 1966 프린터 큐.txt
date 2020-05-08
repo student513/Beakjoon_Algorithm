@@ -1,0 +1,41 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+	queue<pair<int, bool>>q;
+	vector<int> v;
+	int case_num;
+
+	cin >> case_num;
+	while (case_num--) {
+		int size, order, pri;
+		int result = 0;
+		cin >> size >> order;
+		for (int i = 0; i < size; i++) {
+			cin >> pri;
+			if (i == order)q.push(make_pair(pri, true));
+			else q.push(make_pair(pri, false));
+			v.push_back(pri);
+		}
+
+		sort(v.begin(), v.end());
+
+		while (!q.empty()) {
+			if (q.front().first == v[v.size() - 1]) {
+				v.pop_back();
+				result++;
+				if (q.front().second) cout << result << '\n';
+				q.pop();
+			}
+			else {
+				q.push(make_pair(q.front().first, q.front().second));
+				q.pop();
+			}
+		}
+	}
+
+	return 0;
+}

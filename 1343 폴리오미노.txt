@@ -1,0 +1,56 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <cstdio>
+using namespace std;
+string str;
+vector<int> buf;
+int main() {
+	cin >> str;
+	for (int i = 0; i < str.size(); i++) {
+		if (str[i] == 'X') {
+			buf.push_back(1);
+			if(buf.size()==4){
+				buf.clear();
+				for (int j = 0; j < 4; j++) {str[i - j] = 'A';}
+				//cout << '\n'; for (int i = 0; i < str.size(); i++) { cout << str[i]; }
+			}
+		}
+		else if (str[i] == '.') {
+			if (buf.size() == 4) {
+				buf.clear();
+				for (int j = 1; j <= 4; j++) {str[i - j] = 'A';}
+				//cout << '\n'; for (int i = 0; i < str.size(); i++) { cout << str[i]; }
+			}
+			else if (buf.size() == 2) {
+				buf.clear();
+				for (int j = 1; j <= 2; j++) {str[i - j] = 'B';}
+				//cout << '\n'; for (int i = 0; i < str.size(); i++) { cout << str[i]; }
+			}
+			else if (buf.size() == 0) {
+				continue;
+			}
+			else {
+				cout << -1; return 0;
+			}
+		}
+	}
+
+	if (buf.size() == 4) {
+		for (int j = 0; j < 4; j++) {str[str.size()-1 - j] = 'A';}
+		//cout << '\n'; for (int i = 0; i < str.size(); i++) { cout << str[i]; }
+	}
+	else if (buf.size() == 2) {
+		for (int j = 0; j < 2; j++) {str[str.size()-1 - j] = 'B';}
+		//cout << '\n'; for (int i = 0; i < str.size(); i++) { cout << str[i]; }
+	}
+	else if (buf.size() == 0) {
+		
+	}
+	else{
+		cout << -1; return 0;
+	}
+
+	for (int i = 0; i < str.size(); i++) { cout << str[i]; }
+	return 0;
+}

@@ -1,0 +1,43 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <cstdio>
+using namespace std;
+
+int N, M;
+int p = 987654321;
+int n = 987654321;
+int main() {
+	cin >> N >> M;
+	for (int i = 0; i < M; i++) {
+		int temp1, temp2;
+		cin >> temp1 >> temp2;
+		if (temp1 < p)p = temp1;
+		if (temp2 < n)n = temp2;
+	}
+
+	if (N >= 6) {
+		if (p > 6 * n) {
+			cout << N * n;
+		}
+		else {
+			int mul = N / 6;
+			int nmg = N % 6;
+			if (nmg*n < p) {
+				cout << nmg * n + p * mul;
+			}
+			else {
+				cout << p * (mul + 1);
+			}
+		}
+	}
+	else {
+		if (p > 6 * n) {
+			cout << N * n;
+		}
+		else {
+			cout << p;
+		}
+	}
+	return 0;
+}

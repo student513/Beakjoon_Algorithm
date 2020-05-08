@@ -1,0 +1,72 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+int N, ch1, ch2, point;
+string ch[100];
+bool chk() {
+	if (ch[0] == "KBS1"&&ch[1] == "KBS2")return true;
+	return false;
+}
+void update_idx() {
+	for (int i = 0; i < N; i++) {
+		if (ch[i] == "KBS1") {
+			ch1 = i;
+		}
+		else if (ch[i] == "KBS2") {
+			ch2 = i;
+		}
+	}
+}
+void point_up() {
+	if (point == 0)return;
+	point--;
+	cout << 2;
+}
+void point_down() {
+	if (point == N - 1)return;
+	point++;
+	cout << 1;
+}
+void move_up() {
+	if (point == 0)return;
+	string temp = ch[point];
+	ch[point] = ch[point - 1];
+	ch[point - 1] = temp;
+	point--;
+	update_idx();
+	cout << 4;
+}
+void move_down() {
+	if (point == N - 1)return;
+	string temp = ch[point];
+	ch[point] = ch[point + 1];
+	ch[point + 1] = temp;
+	point++;
+	update_idx();
+	cout << 3;
+}
+int main() {
+	cin >> N;
+	for (int i = 0; i < N; i++) {
+		cin >> ch[i];
+		if (ch[i] == "KBS1")ch1 = i;
+		else if (ch[i] == "KBS2")ch2 = i;
+	}
+
+
+	while (point != ch1) {
+		point_down();
+	}
+	while (ch1 != 0) {
+		move_up();
+	}
+	while (point != ch2) {
+		point_down();
+	}
+	while (ch2 != 1) {
+		move_up();
+	}
+	//cout << '\n';for (int i = 0; i < N; i++) {cout << ch[i] << '\n';}
+	return 0;
+}

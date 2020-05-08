@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int N, M, A, B, cnt;
+vector<int> vec[10001];
+vector<int> result;
+bool visited[10001];
+void dfs(int start) {
+	for (int i = 0; i < vec[start].size(); i++) {
+		if (!visited[vec[start][i]]) {
+			visited[vec[start][i]] = true;
+			cnt++;
+			dfs(vec[start][i]);
+		}
+	}
+}
+
+int main() {
+	cin >> N >> M;
+	for (int i = 0; i < M; i++) {
+		cin >> A >> B;
+		vec[B].push_back(A);
+	}
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= N; j++)visited[j] = false;
+		cnt = 0;
+		visited[i] = true;
+		dfs(i);
+		result.push_back(cnt);
+	}
+	int Max = *max_element(result.begin(), result.end());
+	for (int i = 0; i < result.size(); i++) {if (result[i] == Max)cout << i+1 << " ";}
+	//for (int i = 0; i < result.size(); i++)cout << result[i] << " ";
+	return 0;
+}

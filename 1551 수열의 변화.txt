@@ -1,0 +1,40 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <cstdlib>
+#include <string>
+using namespace std;
+vector<int> vec[20];
+int N, K;
+string str;
+int main() {
+	cin >> N >> K;
+	cin >> str;
+
+	int idx=0;
+	string temp;
+	for (int i = 0; i < str.size(); i++) {
+		if (str[i] != ',') {
+			temp.push_back(str[i]);
+			if (i == str.size() - 1) {
+				vec[0].push_back(stoi(temp));
+				//cout << stoi(temp);
+			}
+		}
+		else if (str[i] == ',') {
+			vec[0].push_back(stoi(temp));
+			temp.clear();
+		}
+	}
+	for (int i = 1; i <= K; i++) {
+		for (int j = 0; j < vec[i - 1].size()-1; j++) {
+			int temp = vec[i - 1][j + 1]- vec[i - 1][j];
+			vec[i].push_back(temp);
+		}
+	}
+	for (int i = 0; i < vec[K].size()-1; i++) {
+		cout << vec[K][i]<<",";
+	}
+	cout << vec[K].back();
+	return 0;
+}

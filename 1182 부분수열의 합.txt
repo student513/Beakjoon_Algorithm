@@ -1,0 +1,50 @@
+#include <iostream>
+using namespace std;
+int N, S, Count;
+int arr[21];
+int val[21];
+bool visited[21];
+
+void print(int len) {
+	for (int i = 0; i < len; i++) cout << val[i]<<" ";
+	cout << "\n";
+}
+
+void check(int len) {
+	int sum = 0;
+	for (int i = 0; i < len; i++)sum += val[i];
+	if (sum == S) {
+		Count++;
+		//print(len);
+	}
+}
+
+void func(int len, int idx, int start) {
+	if (idx == len) {
+		check(len);
+		//print(len);
+		/*
+		for (int i = 0; i < len; i++)
+			cout << val[i] << " ";
+		cout << '\n';
+		*/
+		return;
+	}
+	for (int i = 0; i < N; i++) {
+		if (!visited[i] && i >= start) {
+			visited[i] = true;
+			val[idx] = arr[i];
+			func(len, idx + 1, i);
+			visited[i] = false;
+		}
+	}
+}
+
+int main() {
+	cin >> N >> S;
+	for (int i = 0; i < N; i++) cin >> arr[i];
+	for (int i = 1; i <= N; i++)
+		func(i, 0, 0);
+	cout << Count;
+	return 0;
+}

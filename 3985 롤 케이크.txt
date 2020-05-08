@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+int L, N;
+vector<pair<int, int>> vec;
+int cake[1001],result[1001];
+int main() {
+	cin >> L >> N;
+	vec.push_back(make_pair(0,0));
+	for (int i = 0; i < N; i++) {
+		int a, b;
+		cin >> a >> b;
+		vec.push_back(make_pair(a, b));
+	}
+	int max = -1, idx;
+	for (int i = 1; i < vec.size(); i++) {
+		int start = vec[i].first, end = vec[i].second;
+		if (max < end - start) {
+			max = end - start;
+			idx = i;
+		}
+		for (int j = start; j <= end; j++) {
+			if (cake[j] == 0) {
+				cake[j] = i;
+			}
+		}
+	}
+	//for (int i = 1; i <= L; i++) { cout << cake[i] << " "; }cout << '\n';
+	
+	for (int i = 1; i <= L; i++) {
+		result[cake[i]]++;
+	}
+
+	//for (int i = 1; i <= L; i++)cout << result[i] << " "; cout << '\n';
+	int m = -1; int idXX = 0;
+	for (int i = 1; i <= N; i++) {
+		if (result[i] > m) {
+			m = result[i];
+			idXX = i;
+		}
+	}
+	cout << idx << '\n' << idXX;
+	return 0;
+}

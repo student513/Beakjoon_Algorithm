@@ -1,0 +1,58 @@
+#include <iostream>
+#include <cstdio>
+#include <string>
+#include <algorithm>
+using namespace std;
+int N, M;
+string arr[1001];
+int result[51][4];
+int most[51];
+int main() {
+	cin >> N >> M;
+	for (int i = 0; i < N; i++) {
+		cin >> arr[i];
+	}
+	for (int i = 0; i < M; i++) {
+		for (int j = 0; j < N; j++) {
+			switch (arr[j][i]){
+			case 'A': result[i][0]++; break;
+			case 'C': result[i][1]++; break;
+			case 'G': result[i][2]++; break;
+			case 'T': result[i][3]++; break;
+			default:break;
+			}
+		}
+	}//만약 같은게 있다면? 사전순으로 앞선것 우선
+	
+	for (int i = 0; i < M; i++) {
+		int m = 0;
+		for (int j = 3; j >= 0; j--)
+			if (result[i][j] >= m) {
+				m = result[i][j];
+				most[i] = j;
+			}
+	}
+	for (int i = 0; i < M; i++) {
+		switch (most[i]){
+		case 0:cout << 'A'; break;
+		case 1:cout << 'C'; break;
+		case 2:cout << 'G'; break;
+		case 3:cout << 'T'; break;
+		default:break;
+		}
+	}
+	cout << '\n';
+	int sum = 0;
+	for (int i = 0; i < M; i++) {
+		int temp = 0;
+		for (int j = 0; j < 4; j++) {
+			if (most[i] != j) {
+				temp += result[i][j];
+			}
+		}
+		sum += temp;
+	}
+	cout << sum;
+	return 0;
+}
+

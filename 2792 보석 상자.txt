@@ -1,0 +1,42 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <climits>
+using namespace std;
+const int MAX = 300000;
+int N, M;
+long long jewelry[MAX];
+
+bool func(int mid) {
+	int num = 0;
+	for (int i = 0; i < M; i++) {
+		num += jewelry[i] / mid;
+		if (jewelry[i] % mid != 0)num++;
+	}
+	return N >= num;
+}
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> N >> M;
+	long long low = 1, high = 0;
+	for (int i = 0; i < M; i++) {
+		cin >> jewelry[i];
+		high = max(jewelry[i], high);
+	}
+	long long result = LLONG_MAX;
+	long long mid;
+	while (low <= high) {
+		mid = (low + high) / 2;
+		if (func(mid)) {
+			result = min(result, mid);
+			high = mid - 1;
+		}
+		else {
+			low = mid + 1;
+		}
+	}
+	cout << result;
+	return 0;
+}

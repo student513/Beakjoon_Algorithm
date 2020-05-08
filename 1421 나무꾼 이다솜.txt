@@ -1,0 +1,36 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int N, C, W;
+vector<int> vec, result;
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	
+	cin >> N >> C >> W;
+	for (int i = 0; i < N; i++) {
+		int temp;
+		cin >> temp;
+		vec.push_back(temp);
+	}
+	int Max = *max_element(vec.begin(), vec.end());
+	for (int i = 1; i <= Max; i++) {
+		int sum = 0;
+		for (int j = 0; j < vec.size(); j++) {		
+			int cut;
+			if (vec[j] % i == 0) {
+				if (vec[j] != i)cut = (vec[j] / i - 1)*C;//-1은 딱맞을 때
+				else cut = 0;
+			}
+			else if(vec[j]%i != 0)cut = (vec[j] / i)*C;
+
+			int prc = (vec[j] - (vec[j] % i))*W;
+			if(prc - cut>=0)sum += prc - cut;
+		}
+		result.push_back(sum);
+	}
+	int ans = *max_element(result.begin(), result.end());
+	cout << ans;
+	return 0;
+}

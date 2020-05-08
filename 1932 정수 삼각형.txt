@@ -1,0 +1,81 @@
+#include <iostream>
+#define max(a,b) (((a)>(b))?(a):(b))
+
+using namespace std;
+
+int arr_size(int size) {
+	if (size < 2)
+		return 1;
+	else
+		return size + arr_size(size - 1);
+}
+
+int main() {
+	int size;
+	cin >> size;
+
+	int **arr = new int*[size];
+	for (int i = 0; i < size; i++) {
+		arr[i] = new int[size];
+	}
+	int **DP = new int*[size];
+	for (int i = 0; i < size; i++) {
+		DP[i] = new int[size];
+	}
+	
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j <size; j++) {
+			arr[i][j] = 0;
+		}
+	}
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			DP[i][j] = 0;
+		}
+	}
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j <= i; j++) {
+			cin >> arr[i][j];
+		}
+	}
+	
+	/*
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			cout << " "<<arr[i][j];
+		}
+		cout << "\n";
+	}
+	*/
+	DP[0][0] = arr[0][0];
+	for (int i = 1; i < size; i++) {
+		DP[i][0] = DP[i - 1][0] + arr[i][0];
+	}
+	for (int i = 1; i < size; i++) {
+		DP[i][i] += DP[i - 1][i - 1] + arr[i][i];
+	}
+	/*
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			cout <<" "<< DP[i][j];
+		}
+		cout << "\n";
+	}
+	*/
+	for (int i = 2; i < size; i++) {
+		for (int j = 1; j < size; j++) {
+			if (j != 0 && (i != j)) {
+				DP[i][j] = max(DP[i - 1][j - 1], DP[i - 1][j]) + arr[i][j];
+			}
+		}
+	}
+
+	int max_temp = -1;
+	for (int i = 0; i < size; i++) {
+		if (DP[size - 1][i] >= max_temp)
+			max_temp = DP[size - 1][i];
+	}
+	cout << max_temp;
+
+	return 0;
+}

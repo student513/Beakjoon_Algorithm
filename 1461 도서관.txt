@@ -1,0 +1,46 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <climits>
+#include <cstdio>
+using namespace std;
+int N, M, step;
+vector<int>Right,Left;
+bool compare(int a, int b) {
+	return a > b;
+}
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> N >> M;
+	for (int i = 0; i < N; i++) {
+		int temp;
+		cin >> temp;
+		if(temp<0)Left.push_back(temp);
+		else Right.push_back(temp);
+	}
+	sort(Left.begin(), Left.end(),compare);
+	sort(Right.begin(), Right.end());
+
+	int l_Left = Left.size() % M;
+	int l_Right = Right.size() % M;
+
+	if (Left.size() >= 1) {
+		step += abs(Left[l_Left - 1]) * 2;
+		for (int i = l_Left + M - 1; i < Left.size(); i += M) {
+			step += abs(Left[i]) * 2;
+		}
+	}
+	if (Right.size() >= 1) {
+		step += Right[l_Right - 1] * 2;
+		for (int i = l_Right + M - 1; i < Right.size(); i += M) {
+			step += abs(Right[i]) * 2;
+		}
+	}
+	int l_b = 0;if(!Left.empty())l_b = Left.back();
+	int r_b = 0; if (!Right.empty())r_b = Right.back();
+	int Max = max(abs(l_b), r_b);
+	cout << step - Max;
+
+	return 0;
+}
